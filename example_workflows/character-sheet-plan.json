@@ -6,12 +6,12 @@
       "id": 1,
       "type": "ApixlyCharacterSheetPlan",
       "pos": [
-        30,
-        40
+        70,
+        130
       ],
       "size": [
-        520,
-        900
+        300,
+        720
       ],
       "flags": {},
       "order": 0,
@@ -53,8 +53,8 @@
       "id": 2,
       "type": "Note",
       "pos": [
-        620,
-        40
+        450,
+        130
       ],
       "size": [
         580,
@@ -78,11 +78,21 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.6,
+      "scale": 1,
       "offset": [
-        30,
-        30
+        0,
+        0
       ]
+    },
+    "apixly_free_tools_v2": {
+      "primary_node_id": 1,
+      "initial_view": {
+        "scale": 1,
+        "offset": [
+          0,
+          0
+        ]
+      }
     }
   },
   "version": 0.4

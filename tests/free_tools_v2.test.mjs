@@ -182,7 +182,67 @@ test('public extension entry routes new free nodes before any account/model-pick
  app.registerExtension=value=>{extension=value;};
  const forbidden=()=>{throw Error('A free node must not enter the media/account path.');};
  const source=fs.readFileSync(new URL('../web/apixly.js',import.meta.url),'utf8').replace(/^import[^;]+;\n/gm,'');
- vm.runInNewContext(source,{app,api:{},nativeDownloadURL(){},safeResultURL(){},isCreativeNode:()=>false,attachCreativePanel:forbidden,accountBridge:forbidden,attachModelPicker:forbidden,attachFreeV2Panel:m.attachFreeV2Panel,document:globalThis.document});
+ vm.runInNewContext(source,{app,api:{},nativeDownloadURL(){},safeResultURL(){},isCreativeNode:()=>false,attachCreativePanel:forbidden,accountBridge:forbidden,attachModelPicker:forbidden,attachFreeV2Panel:m.attachFreeV2Panel,scheduleInitialFreeTemplateView:m.scheduleInitialFreeTemplateView,document:globalThis.document});
  extension.nodeCreated(node);
  assert.equal(node.panel.dataset.apixlyFreeV2,'emotion');
+ assert.equal(extension.afterLoadGraph(),undefined,'The native load hook must return immediately, without awaiting a frame.');
+});
+
+test('a newly created expression node fits native 375px usable bounds and preserves later user sizing',async()=>{
+ const m=await import(modulePath);const {node,app}=setup('ApixlyPromptEmotion',{enabled:false,arousal:0,affinity:0,target_label:''});
+ node.size=[440,900];
+ const add=node.addDOMWidget;node.addDOMWidget=function(...args){this.domWidget=add.apply(this,args);return this.domWidget;};
+ // 142px is the native pre-DOM widget region measured in the real red case.
+ node.computeSize=function(){return [440,142+(this.domWidget?.computeSize?.()[1]??0)];};
+ m.attachFreeV2Panel(node,app);
+ assert.ok(70+node.size[0]<=375,'A newly created tool must fit beside the native sidebar at 1:1.');
+ assert.ok(130+node.size[1]<=850,'The default node must fit above the bottom toolbar; its details can scroll.');
+ node.setSize([520,820]);node.onConfigure();
+ assert.deepEqual(node.size,[520,820],'Loading or resizing an existing node must preserve user dimensions.');
+});
+
+function markedTemplateApp(){
+ const {node,app}=setup('ApixlyPromptEmotion',{});
+ app.graph.extra={ds:{scale:1,offset:[0,0]},apixly_free_tools_v2:{primary_node_id:1,initial_view:{scale:1,offset:[0,0]}}};
+ app.canvas={ds:{scale:0.4,offset:[-90,-80]},canvas:new Element('canvas')};
+ return {node,app};
+}
+
+test('marked new-template view restores once after native fit without awaiting or modifying node sizes',async()=>{
+ const m=await import(modulePath);const {node,app}=markedTemplateApp();const frames=[];const size=[...node.size];
+ assert.equal(m.scheduleInitialFreeTemplateView(app,cb=>frames.push(cb)),true);
+ assert.equal(app.canvas.ds.scale,0.4,'The loader is not blocked and the camera is not changed synchronously.');
+ app.canvas.ds.scale=0.3;frames[0]();
+ assert.equal(app.canvas.ds.scale,1);assert.deepEqual(app.canvas.ds.offset,[0,0]);assert.deepEqual(node.size,size);
+ app.canvas.ds.scale=0.75;
+ assert.equal(m.scheduleInitialFreeTemplateView(app,cb=>frames.push(cb)),false);
+ assert.equal(app.canvas.ds.scale,0.75,'Later user zoom must remain untouched.');
+});
+
+test('unmarked graphs, saved custom views and disabled restore are never focused',async()=>{
+ const m=await import(modulePath);
+ for(const change of [app=>delete app.graph.extra.apixly_free_tools_v2,app=>app.graph.extra.ds.scale=0.8,app=>app.graph.extra.ds.offset=[10,0],app=>app.ui={settings:{getSettingValue:()=>false}}]){
+  const {app}=markedTemplateApp();change(app);
+  assert.equal(m.scheduleInitialFreeTemplateView(app,()=>{throw Error('No frame should be queued.');}),false);
+  assert.equal(app.canvas.ds.scale,0.4);
+ }
+});
+
+test('pointer/wheel intent or a replaced graph cancels pending initial-template focus',async()=>{
+ const m=await import(modulePath);
+ for(const interrupt of [app=>app.canvas.canvas.dispatch('pointerdown'),app=>app.canvas.canvas.dispatch('wheel'),app=>app.graph._nodes=[]]){
+  const {app}=markedTemplateApp(),frames=[];
+  assert.equal(m.scheduleInitialFreeTemplateView(app,cb=>frames.push(cb)),true);
+  interrupt(app);frames[0]();assert.equal(app.canvas.ds.scale,0.4);
+ }
+});
+
+test('default initial-template scheduling waits two native animation frames and then stops',async()=>{
+ const m=await import(modulePath),{app}=markedTemplateApp(),frames=[];
+ const previous=globalThis.requestAnimationFrame;globalThis.requestAnimationFrame=cb=>{frames.push(cb);return frames.length;};
+ try{
+  assert.equal(m.scheduleInitialFreeTemplateView(app),true);assert.equal(frames.length,1);
+  frames[0]();assert.equal(frames.length,2);assert.equal(app.canvas.ds.scale,0.4);
+  frames[1]();assert.equal(app.canvas.ds.scale,1);assert.equal(frames.length,2);
+ }finally{if(previous)globalThis.requestAnimationFrame=previous;else delete globalThis.requestAnimationFrame;}
 });

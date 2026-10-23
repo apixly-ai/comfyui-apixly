@@ -4,7 +4,7 @@ import { nativeDownloadURL, safeResultURL } from "./helpers.mjs";
 import { isCreativeNode } from "./creative-helpers.mjs";
 import { attachCreativePanel } from "./creative.mjs";
 import { accountBridge, attachModelPicker, mountAccount } from "./account.mjs";
-import { attachFreeV2Panel } from "./free_tools_v2.mjs";
+import { attachFreeV2Panel, scheduleInitialFreeTemplateView } from "./free_tools_v2.mjs";
 
 const LINKS = [
   ["Apixly website", "https://apixly.ai"],
@@ -39,6 +39,9 @@ function accountSettings() {
 
 app.registerExtension({
   name: "Apixly.Media",
+  afterLoadGraph() {
+    scheduleInitialFreeTemplateView(app);
+  },
   setup() {
     let dispose;
     app.extensionManager.registerSidebarTab({

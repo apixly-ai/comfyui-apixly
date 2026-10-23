@@ -74,3 +74,33 @@ def test_character_starter_outputs_one_selected_shot_and_contains_no_paid_node()
     plan = graph["nodes"][0]
     assert json.loads(plan["widgets_values"][3]) == ["seedance-pack"]
     assert plan["widgets_values"][5] == -1
+
+
+@pytest.mark.parametrize(
+    "name,primary_type",
+    [
+        ("expression-prompt-v2", "ApixlyPromptEmotion"),
+        ("image-grid-split", "ApixlyImageGridSplit"),
+        ("image-enhancement-prompt", "ApixlyEnhancementPrompt"),
+        ("character-sheet-plan", "ApixlyCharacterSheetPlan"),
+    ],
+)
+def test_new_template_default_view_keeps_primary_tool_visible_and_tappable_at_375(
+    name, primary_type
+):
+    graph = json.loads((ROOT / "example_workflows" / (name + ".json")).read_text())
+    primary = next(node for node in graph["nodes"] if node["type"] == primary_type)
+    camera = graph["extra"]["ds"]
+    scale = camera["scale"]
+    dx, dy = camera["offset"]
+    # Official DragAndScale: screen = (world + offset) * scale. Reserve the
+    # actual native 55px sidebar, top controls and bottom toolbar at 375×900.
+    left = (primary["pos"][0] + dx) * scale
+    top = (primary["pos"][1] + dy) * scale
+    right = left + primary["size"][0] * scale
+    bottom = top + primary["size"][1] * scale
+    assert 60 <= left < right <= 375
+    assert 110 <= top < bottom <= 850
+    assert 44 * scale >= 44, (
+        "Canvas zoom must not shrink the 44px controls below a physical 44px target."
+    )

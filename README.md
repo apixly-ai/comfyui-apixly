@@ -248,6 +248,13 @@ model and current price, then explicitly unmute and press Run once for a paid
 edit. Keep the original nonce/task for recovery. The expression, grid and
 character starters contain no paid submission node.
 
+The four new starters open their primary tool at a 1:1 initial view and a
+300px node width. Details scroll vertically; pan the canvas to the other nodes.
+The native Templates entry normally fits the entire graph, so an unchanged
+starter view is restored once after initial loading. Saved custom views and
+later user zoom or node resizing are retained; pointer/wheel input cancels a
+pending initial restore. Older workflows are unaffected.
+
 ## Live model pickers
 
 Image and video Submit/Edit nodes provide a picker for the **current selected

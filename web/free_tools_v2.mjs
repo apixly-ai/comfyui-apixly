@@ -25,6 +25,7 @@ const TITLES={emotion:'Expression',compose:'Final prompt · V2',grid:'Image Grid
 const SHEET_LABELS={'key-visual':'Key visual',turnaround:'Turnaround','head-closeups':'Head closeups',expressions:'Expressions',poses:'Action poses',costume:'Costume & props','color-material':'Color & material',proportions:'Proportions','seedance-pack':'Seedance · 3 separate shots'};
 const BUTTON='min-height:44px;min-width:44px;border:1px solid #2e8fff55;border-radius:9px;background:#1670f018;color:inherit;cursor:pointer;padding:7px 10px;font:inherit;white-space:normal';
 const PANELS=new WeakMap();
+const INITIAL_VIEWS=new WeakSet();
 let nextFaceId=0;
 const text=(v,name,limit=20000)=>{if(typeof v!=='string'||v.length>limit)throw Error(`${name}: expected bounded text.`);return v;};
 const level=(v,name)=>{if(!Number.isInteger(v)||v< -2||v>2)throw Error(`${name}: expected an integer from -2 to 2.`);return v;};
@@ -116,6 +117,37 @@ function reconcileCharacterSelection(node,v,shots){
  node.properties.apixlyCharacterSelection={key,index,sheetIds:v.sheet_ids_json};
  return entries;
 }
+
+// ComfyUI frontend 1.57.1 schedules its camera fit during graph loading;
+// the Templates entry fits every node even when extra.ds is present. Restore
+// only our unchanged starter view after that initial frame. This hook returns
+// immediately, never reacts to later zoom/resize, and never resizes any node.
+export function scheduleInitialFreeTemplateView(app,schedule=callback=>requestAnimationFrame(()=>requestAnimationFrame(callback))){
+ const graph=app.graph,extra=graph?.extra,marker=extra?.apixly_free_tools_v2,view=marker?.initial_view,saved=extra?.ds;
+ if(!extra||typeof extra!=='object'||INITIAL_VIEWS.has(extra)||!view||!saved||!app.canvas?.ds)return false;
+ if(app.ui?.settings?.getSettingValue?.('Comfy.EnableWorkflowViewRestore')===false)return false;
+ if(view.scale!==1||!Array.isArray(view.offset)||view.offset.length!==2||view.offset.some(x=>!Number.isFinite(x)))return false;
+ if(saved.scale!==view.scale||!Array.isArray(saved.offset)||saved.offset.length!==2||saved.offset.some((x,i)=>x!==view.offset[i]))return false;
+ const primary=graph.getNodeById?.(marker.primary_node_id);
+ if(!primary||!KINDS[primary.comfyClass??primary.type])return false;
+ const nodes=graph._nodes,events=app.canvas.canvas?.ownerDocument??app.canvas.canvas;
+ let cancelled=false;
+ const cleanup=()=>{events?.removeEventListener?.('pointerdown',cancel,true);events?.removeEventListener?.('wheel',cancel,true);};
+ const cancel=()=>{cancelled=true;cleanup();};
+ INITIAL_VIEWS.add(extra);
+ events?.addEventListener?.('pointerdown',cancel,{capture:true,passive:true});
+ events?.addEventListener?.('wheel',cancel,{capture:true,passive:true});
+ schedule(()=>{
+  cleanup();
+  if(cancelled||app.graph!==graph||graph.extra!==extra||graph._nodes!==nodes)return;
+  // A workflow save/replacement during the delayed frame must also win.
+  if(extra.ds?.scale!==view.scale||extra.ds?.offset?.some((x,i)=>x!==view.offset[i]))return;
+  app.canvas.ds.scale=view.scale;app.canvas.ds.offset=[...view.offset];
+  app.canvas.ds.computeVisibleArea?.(app.canvas.viewport);
+  graph.setDirtyCanvas?.(true,true);
+ });
+ return true;
+}
 function values(node){return {...DEFAULTS[KINDS[node.comfyClass]],...Object.fromEntries((node.widgets??[]).map(w=>[w.name,w.value]))};}
 function element(tag,label,style){const e=document.createElement(tag);if(label!==undefined)e.textContent=label;if(style)e.style.cssText=style;return e;}
 function svg(tag,attrs){const e=document.createElementNS('http://www.w3.org/2000/svg',tag);for(const [key,v]of Object.entries(attrs))e.setAttribute(key,v);return e;}
@@ -139,7 +171,7 @@ function composePayload(node,app){
 }
 function faceDrawing(a,f,id){
  const shape=faceFeatures(a,f),eyeRy=1.8+shape.eyeOpen*5.2,brow=37-shape.browRaise*4,inner=-shape.browAngle*3.5,corner=71-shape.mouthCurve*3,ctrl=71+shape.mouthCurve*11,half=shape.mouthOpen*6;
- const drawing=svg('svg',{viewBox:'0 0 100 100',width:'132',height:'132','aria-label':'Original Studixly expression preview',role:'img',fill:'none'});
+ const drawing=svg('svg',{viewBox:'0 0 100 100',width:'80',height:'80','aria-label':'Original Studixly expression preview',role:'img',fill:'none'});
  const defs=svg('defs',{}),gradient=svg('radialGradient',{id,cx:'50%',cy:'34%',r:'72%'});
  gradient.append(svg('stop',{offset:'0%','stop-color':'rgba(46,143,255,0.20)'}),svg('stop',{offset:'100%','stop-color':'rgba(9,12,20,0.35)'}));defs.append(gradient);drawing.append(defs);
  drawing.append(svg('ellipse',{cx:50,cy:52,rx:31,ry:37,fill:`url(#${id})`,stroke:'rgba(46,143,255,0.55)','stroke-width':1.4}));
@@ -152,7 +184,7 @@ function faceDrawing(a,f,id){
 export function attachFreeV2Panel(node,app){
  const kind=KINDS[node.comfyClass];if(!kind)return false;
  if(PANELS.has(node))return true;
- const root=element('section',undefined,'box-sizing:border-box;display:flex;flex-direction:column;gap:10px;min-width:0;padding:12px;border:1px solid #2e8fff44;border-radius:14px;background:linear-gradient(145deg,#2e8fff12,#06070ae6);color:#e2e8f0;font:12px/1.5 system-ui;overflow:auto;pointer-events:auto');
+ const root=element('section',undefined,'box-sizing:border-box;display:flex;flex-direction:column;gap:10px;min-width:0;max-width:100%;padding:12px;border:1px solid #2e8fff44;border-radius:14px;background:linear-gradient(145deg,#2e8fff12,#06070ae6);color:#e2e8f0;font:12px/1.5 system-ui;overflow-x:hidden;overflow-y:auto;pointer-events:auto');
  root.dataset.apixlyFreeV2=kind;
  root.addEventListener('pointerdown',e=>e.stopPropagation());
  const header=element('div',undefined,'display:flex;align-items:center;gap:10px;flex-wrap:wrap');
@@ -235,6 +267,8 @@ export function attachFreeV2Panel(node,app){
  for(const hook of ['onConnectionsChange','onConfigure','onAdded']){const old=node[hook];node[hook]=function(...args){old?.apply(this,args);refreshAll(app);};}
  const executed=node.onExecuted;
  node.onExecuted=function(message){executed?.apply(this,arguments);const actual=message?.apixly_free_v2?.[0];if(!actual)return;preview.value=actual.final_prompt??actual.prompt??actual.selected_prompt??JSON.stringify(actual,null,2);copy.disabled=!preview.value;status.textContent='Executed offline output · No generation submitted';};
- const widget=node.addDOMWidget('apixly_free_v2','div',root,{serialize:false,hideOnZoom:false});widget.computeSize=()=>[280,kind==='emotion'?650:kind==='character'?670:420];
- refresh();node.setSize([Math.max(300,node.size[0]),Math.max(node.computeSize()[1],node.size[1])]);return true;
+ const widget=node.addDOMWidget('apixly_free_v2','div',root,{serialize:false,hideOnZoom:false});widget.computeSize=()=>[280,kind==='emotion'?560:360];
+ // Initialization only. Native workflow configure and later user resizing keep
+ // their saved dimensions; no viewport/zoom listener rewrites node geometry.
+ refresh();node.setSize([300,node.computeSize()[1]]);return true;
 }

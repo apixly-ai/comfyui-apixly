@@ -6,8 +6,8 @@
       "id": 1,
       "type": "ApixlyPromptViewpoint",
       "pos": [
-        30,
-        40
+        450,
+        130
       ],
       "size": [
         440,
@@ -48,8 +48,8 @@
       "id": 2,
       "type": "ApixlyPromptLighting",
       "pos": [
-        520,
-        40
+        950,
+        130
       ],
       "size": [
         440,
@@ -97,12 +97,12 @@
       "id": 3,
       "type": "ApixlyPromptEmotion",
       "pos": [
-        30,
-        1100
+        70,
+        130
       ],
       "size": [
-        440,
-        900
+        300,
+        710
       ],
       "flags": {},
       "order": 2,
@@ -138,8 +138,8 @@
       "id": 4,
       "type": "ApixlyPromptCamera",
       "pos": [
-        520,
-        1100
+        1450,
+        130
       ],
       "size": [
         440,
@@ -181,12 +181,12 @@
       "id": 5,
       "type": "ApixlyPromptComposeV2",
       "pos": [
-        1030,
-        40
+        450,
+        1230
       ],
       "size": [
-        520,
-        580
+        300,
+        650
       ],
       "flags": {},
       "order": 4,
@@ -239,8 +239,8 @@
       "id": 6,
       "type": "Note",
       "pos": [
-        1030,
-        690
+        950,
+        1230
       ],
       "size": [
         520,
@@ -297,11 +297,21 @@
   "config": {},
   "extra": {
     "ds": {
-      "scale": 0.6,
+      "scale": 1,
       "offset": [
-        30,
-        30
+        0,
+        0
       ]
+    },
+    "apixly_free_tools_v2": {
+      "primary_node_id": 3,
+      "initial_view": {
+        "scale": 1,
+        "offset": [
+          0,
+          0
+        ]
+      }
     }
   },
   "version": 0.4
