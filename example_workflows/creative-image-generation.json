@@ -1,0 +1,423 @@
+{
+  "last_node_id": 13,
+  "last_link_id": 99,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "ApixlyPromptViewpoint",
+      "pos": [
+        30,
+        40
+      ],
+      "size": [
+        440,
+        760
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "angle",
+          "type": "APIXLY_ANGLE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptViewpoint"
+      },
+      "widgets_values": [
+        false,
+        "custom",
+        0,
+        0,
+        "none"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "ApixlyPromptLighting",
+      "pos": [
+        520,
+        40
+      ],
+      "size": [
+        440,
+        960
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "lighting",
+          "type": "APIXLY_LIGHTING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptLighting"
+      },
+      "widgets_values": [
+        false,
+        "none",
+        50,
+        false,
+        "#2e8fff",
+        "perspective",
+        "unspecified",
+        "none",
+        0,
+        0,
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "ApixlyPromptCamera",
+      "pos": [
+        1010,
+        40
+      ],
+      "size": [
+        440,
+        640
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "camera",
+          "type": "APIXLY_CAMERA",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptCamera"
+      },
+      "widgets_values": [
+        false,
+        "none",
+        "none",
+        false,
+        50,
+        "none"
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ApixlyPromptCompose",
+      "pos": [
+        1010,
+        760
+      ],
+      "size": [
+        540,
+        500
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "angle",
+          "type": "APIXLY_ANGLE",
+          "link": 1
+        },
+        {
+          "name": "lighting",
+          "type": "APIXLY_LIGHTING",
+          "link": 2
+        },
+        {
+          "name": "camera",
+          "type": "APIXLY_CAMERA",
+          "link": 3
+        }
+      ],
+      "outputs": [
+        {
+          "name": "final_prompt",
+          "type": "STRING",
+          "links": [
+            99
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "controls_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptCompose"
+      },
+      "widgets_values": [
+        "A clean studio product photograph of a blue glass vase on a neutral table.",
+        "generate"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "Note",
+      "pos": [
+        30,
+        1060
+      ],
+      "size": [
+        940,
+        260
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "FREE PREVIEW FIRST: all creative controls start off. Run compiles the prompt only because every API/media node starts MUTED (Mode: Never). Choose presets or drag the controls, inspect final_prompt, then explicitly unmute the API/media group and queue once when ready for a PAID generation. Review the exact model and parameters first. request_nonce starts at 0 with fixed behavior: reuse it to recover this same action; choose a new nonce only for an intentional new paid action. These controls compose AI instructions; they are not a precise 3D camera or optics API."
+      ]
+    },
+    {
+      "id": 11,
+      "type": "ApixlyImageSubmit",
+      "pos": [
+        1600,
+        80
+      ],
+      "size": [
+        380,
+        260
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "prompt",
+          "type": "STRING",
+          "link": 99,
+          "widget": {
+            "name": "prompt"
+          }
+        }
+      ],
+      "outputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": [
+            11
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "submission_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyImageSubmit"
+      },
+      "widgets_values": [
+        "grok-imagine-image",
+        "",
+        "{\"n\":1}",
+        0,
+        "fixed"
+      ]
+    },
+    {
+      "id": 12,
+      "type": "ApixlyImageResult",
+      "pos": [
+        1600,
+        670
+      ],
+      "size": [
+        380,
+        260
+      ],
+      "flags": {},
+      "order": 6,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 11
+        }
+      ],
+      "outputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "links": [
+            12
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "result_urls_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "receipt_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyImageResult"
+      },
+      "widgets_values": [
+        "",
+        600,
+        3.0
+      ]
+    },
+    {
+      "id": 13,
+      "type": "PreviewImage",
+      "pos": [
+        2050,
+        670
+      ],
+      "size": [
+        360,
+        360
+      ],
+      "flags": {},
+      "order": 7,
+      "mode": 2,
+      "inputs": [
+        {
+          "name": "images",
+          "type": "IMAGE",
+          "link": 12
+        }
+      ],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "PreviewImage"
+      },
+      "widgets_values": []
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      4,
+      0,
+      "APIXLY_ANGLE"
+    ],
+    [
+      2,
+      2,
+      0,
+      4,
+      1,
+      "APIXLY_LIGHTING"
+    ],
+    [
+      3,
+      3,
+      0,
+      4,
+      2,
+      "APIXLY_CAMERA"
+    ],
+    [
+      11,
+      11,
+      0,
+      12,
+      0,
+      "STRING"
+    ],
+    [
+      12,
+      12,
+      0,
+      13,
+      0,
+      "IMAGE"
+    ],
+    [
+      99,
+      4,
+      0,
+      11,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [
+    {
+      "title": "API media \u2014 muted until you enable it",
+      "bounding": [
+        1570,
+        -330,
+        1000,
+        1520
+      ],
+      "color": "#2e8fff",
+      "font_size": 24,
+      "flags": {}
+    }
+  ],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.5,
+      "offset": [
+        60,
+        350
+      ]
+    }
+  },
+  "version": 0.4
+}

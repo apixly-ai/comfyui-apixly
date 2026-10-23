@@ -1,28 +1,32 @@
 <picture>
   <source media="(max-width: 640px)" srcset="assets/hero-mobile.svg">
-  <img src="assets/hero.svg" alt="Apixly Media for ComfyUI — Images, reference edits and videos. Six nodes, four starter workflows." width="1440">
+  <img src="assets/hero.svg" alt="Apixly Media for ComfyUI — Images, reference edits and videos. Ten nodes, eight starter workflows, free creative prompt controls." width="1440">
 </picture>
 
 # Apixly Media for ComfyUI
 
 Generate images, edit references and create videos through [apixly.ai](https://apixly.ai).
-Keep your work on the ComfyUI canvas: submit an exact model, preview the result,
-and pass images, public URLs or downloaded video files to the next step.
+Connect your own Apixly account, choose an owned Key and discover its current models.
+Shape lighting, viewpoint and camera instructions for free, then explicitly submit
+an exact model. Preview the result and pass images, URLs or video files to the next step.
 
 <p>
   <a href="#install"><strong>Install the nodes →</strong></a> ·
-  <a href="https://platform.apixly.ai/keys"><strong>Get an API key →</strong></a> ·
+  <a href="#2-connect-your-account"><strong>Connect your account →</strong></a> ·
+  <a href="https://platform.apixly.ai/keys">Manage API Keys</a> ·
   <a href="https://platform.apixly.ai/models">Models &amp; prices</a> ·
   <a href="https://registry.comfy.org/publishers/apixly/nodes/comfyui-apixly">Comfy Registry</a>
 </p>
 
 **MIT licensed · Python 3.10+ · No local GPU required for API generation**
 
+- **Free creative controls:** orbit diagrams, lighting presets and camera/lens instructions compose a prompt without an API call.
+- **Your account and models:** authorize in your browser, choose the default Studixly Key or another owned Key, then open a live model picker.
 - **Images and reference edits:** use a dedicated editing node and pass every image in a reference batch.
 - **Text and reference video:** use explicit models and keep the resulting file or temporary URL.
 - **Task recovery:** copy the task ID and retrieve an existing result without generating again.
 
-The plugin is free. Generation requires an Apixly account, an API key with access
+The plugin is free. Generation requires your own Apixly account or server API key, access
 to the chosen model, and sufficient API balance. API charges are separate from
 Comfy credits and subscriptions. This package is maintained by Apixly and is not
 a Comfy Partner Node. Selected 1K image generation costs **US$0.02 per image** as
@@ -56,6 +60,10 @@ Open **Templates → comfyui-apixly** or drag a linked JSON file onto the canvas
 
 | Start with | What it does | Qualified starting model |
 | --- | --- | --- |
+| [Free creative prompt](example_workflows/creative-prompt.json) | Lighting + viewpoint + camera/lens → final prompt; no Key or model request | No model required |
+| [Creative → image](example_workflows/creative-image-generation.json) | Free prompt preview → explicitly enabled image generation | `grok-imagine-image` |
+| [Creative → reference edit](example_workflows/creative-reference-edit.json) | Free edit prompt → your local reference → explicitly enabled edit | `gemini-3.1-flash-image` |
+| [Creative → video](example_workflows/creative-video-generation.json) | Free prompt preview → explicitly enabled 3-second text video | `grok-imagine-video` |
 | [Image generation](example_workflows/image-generation.json) | Prompt → image preview | `grok-imagine-image` |
 | [Reference edit](example_workflows/reference-image-edit.json) | Local image → reference edit → image preview | `gemini-3.1-flash-image` |
 | [Video generation](example_workflows/video-generation.json) | Prompt → 3-second, 720p, 16:9 clip | `grok-imagine-video` |
@@ -73,15 +81,14 @@ this omits those API fields and uses source framing. The diagram is explanatory;
 These exact presets passed bounded live checks. They do not establish support
 or output quality for every model or parameter combination.
 
+The three **Creative → media** templates start with their media group muted
+(**Mode: Never**) and a fixed nonce. Running their free section only compiles a
+prompt. Review the final prompt, exact model and price, choose your reference if
+needed, then explicitly unmute the media group and queue a paid action.
+
 ## Install
 
-### 1. Create your limited API key
-
-Open [platform.apixly.ai](https://platform.apixly.ai), create an
-[API key](https://platform.apixly.ai/keys) with a small spending limit, and check
-that it can access your [chosen model](https://platform.apixly.ai/models).
-
-### 2. Add the nodes to ComfyUI
+### 1. Add the nodes to ComfyUI
 
 From your ComfyUI directory, with its Python environment activated:
 
@@ -92,9 +99,32 @@ python -m pip install -r custom_nodes/comfyui-apixly/requirements.txt
 
 The package is also listed on [Comfy Registry](https://registry.comfy.org/publishers/apixly/nodes/comfyui-apixly).
 
-### 3. Set the key on the server and launch
+### 2. Connect your account
 
-On macOS/Linux, read the key without putting it into shell history:
+Start or restart ComfyUI, open the **Apixly sidebar**, and choose **Connect / reconnect**.
+Check the short code and click **Open authorization page** for the official
+[apixly.ai](https://apixly.ai) approval page. Sign in
+normally, review the requesting plugin and approve **your own Studixly Key
+(default)** or another active Key from your account. Return to ComfyUI to finish.
+Your website password and login JWT never enter the plugin.
+
+The sidebar shows the selected Key's name and mask. Change it with the owned-Key
+dropdown, refresh its metadata, switch modes explicitly, or disconnect this
+connection. You can also revoke a lost connection from
+[website connection settings](https://apixly.ai/integrations).
+For a limited project budget, create a capped [Key](https://platform.apixly.ai/keys)
+first and select it during approval or in the sidebar.
+
+This is one **server operator account**, just like a server environment key.
+A Comfy browser client ID is not a separate authenticated user. Use separate
+ComfyUI instances for different users or billing accounts. Connect from the local
+ComfyUI UI; account changes require same-origin checks and a panel CSRF token.
+
+### 3. Alternatively, use a server environment key
+
+Choose **Use server APIXLY_API_KEY** in the sidebar if you prefer a Key supplied
+by your server launcher. No key entry is exposed to the browser. On macOS/Linux,
+read the key without putting it into shell history:
 
 ```sh
 read -s APIXLY_API_KEY
@@ -114,7 +144,7 @@ python main.py
 </details>
 
 Restart ComfyUI after installation. Search for **Apixly** in Add Node, or open one
-of the four templates above. With ComfyUI Desktop or a managed service, set the
+of the eight templates above. With ComfyUI Desktop or a managed service, set the
 variable in the actual server launcher; another terminal's environment will not
 reach an already-running server. Never put a key in a prompt, node, workflow,
 screenshot or public issue.
@@ -127,7 +157,8 @@ No runtime package installation is performed. The HTTP client uses the small
 
 ![Actual Settings → Apixly → Media panel with account, API key, model price, usage, documentation and support links.](assets/screenshots/account-settings.png)
 
-Account and service links live in **Settings → Apixly → Media**:
+This capture shows the earlier Settings link panel. The new account controls
+live in the **Apixly sidebar**; service links remain in **Settings → Apixly → Media**:
 [website](https://apixly.ai), [console](https://platform.apixly.ai),
 [API keys](https://platform.apixly.ai/keys), [models & prices](https://platform.apixly.ai/models),
 [usage details](https://platform.apixly.ai/usage/logs), [API docs](https://apixly.ai/docs)
@@ -136,10 +167,52 @@ and [support](mailto:support@apixly.ai).
 
 </details>
 
+## Free creative controls
+
+Add **Viewpoint**, **Lighting** and **Camera & Lens**, then connect their typed
+outputs to **Compose Prompt**. Each tool starts **Off**; when all are off, Compose
+keeps your base prompt exactly. Turning controls on changes instructions only.
+The final prompt is visible and can be copied before any generation.
+
+- **Viewpoint:** choose a fixed direction preset or drag the orbit marker. Positive
+  elevation means above the subject. The diagram and first drag use the effective
+  preset angle; switching its viewing grid does not alter the instructions.
+- **Lighting:** use a preset or adjust direction, brightness, a deliberate color,
+  environment and optional free text. Turning it off preserves settings for later.
+- **Camera & Lens:** choose camera/lens descriptions, framing and an optional
+  explicit focal-length instruction. These are creative hints, not measured optics.
+- **Compose Prompt:** use `generate` for a new scene or `edit` to ask the model to
+  preserve the reference subject while changing the requested qualities.
+
+The controls compose ordinary AI instructions. They do not add undocumented
+provider fields or promise an exact 3D camera transform, physically simulated
+lighting or identical subject preservation. The selected model determines the
+result. They work without a Key, and preview/reset/copy never queue a generation.
+Connect `final_prompt` to a Submit/Edit prompt only when you intend to generate.
+
+## Live model pickers
+
+Image and video Submit/Edit nodes provide a picker for the **current selected
+Key**, plus an exact/custom model path that preserves your chosen ID. Opening a
+picker lazily reads the selected-key catalog. Options have a ten-minute cache,
+stale-while-revalidate behavior, one shared refresh per identity and a manual
+**Refresh models** action. Failure preserves same-identity saved options with a
+stale/error indicator; changing accounts or Keys discards old in-flight results.
+Refresh does not switch models or generate anything.
+
+One limited-Key check on October 23, 2026 listed **14 image and 11 video options**.
+These are observations for that Key, not permanent package counts or a promise
+that every listed model/mode is qualified. Exact permissions and video
+capabilities come from the live service.
+
 ## Nodes
 
 | Node | Behavior | Outputs |
 | --- | --- | --- |
+| Apixly Prompt: Viewpoint | Composes optional subject-relative angle instructions | typed angle, instruction text |
+| Apixly Prompt: Lighting | Composes optional lighting and environment instructions | typed lighting, instruction text |
+| Apixly Prompt: Camera & Lens | Composes optional camera/lens/framing instructions | typed camera, instruction text |
+| Apixly Prompt: Compose | Combines your base prompt and enabled tools; never generates | final prompt, controls JSON |
 | Apixly Image: Submit | Starts one asynchronous text-to-image job | `task_id`, `submission_json` |
 | Apixly Image: Edit | Requires reference images and explicitly suggests the qualified Gemini editing model | `task_id`, `submission_json` |
 | Apixly Image: Result | Waits for an existing image task and decodes every result | `IMAGE`, result URL JSON, receipt JSON |
@@ -154,7 +227,7 @@ Set an exact model ID that your Apixly API key can use. Image generation suggest
 background in the initial live smoke test; this is a bounded sample, not a quality
 guarantee. Grok reference editing is not qualified by that result. Video suggests
 `grok-imagine-video`. Available models and permissions depend on your API key group.
-Check your Apixly model catalog; `GET https://apixly.ai/v1/models` lists model IDs
+Check your selected-key model catalog; `GET https://apixly.ai/v1/models/list` lists IDs and model types
 and `GET https://apixly.ai/v1/video/config` exposes current video capabilities.
 The plugin does not rename a model, select a fallback, or change requested fields.
 
@@ -247,6 +320,8 @@ Public reference-image identity uses its content hash rather than the temporary
 URL signature, so URL refreshes do not create another paid generation.
 Only digests, task IDs/statuses, timestamps, and submission states are stored;
 keys, prompts, reference bytes, and raw API responses are not stored there.
+Account-mode request identity uses the account, selected Key and selection revision;
+replacing a connection token alone does not turn the same paid action into a new one.
 Its default location is `ComfyUI/user/apixly/submissions.sqlite3` (the actual
 ComfyUI user-directory setting is respected). `APIXLY_STATE_DIR` may select a
 different server-owned directory. It must be writable by the ComfyUI user.
@@ -269,17 +344,25 @@ submit nonce just to retry downloading**.
 Interrupted media downloads get at most three safe GET attempts; partial bodies
 are discarded and are never delivered as completed files.
 
-Use trusted workflows and protect access to the ComfyUI server. Environment
-credentials apply to that server process: another person who can execute its
-nodes may spend the same key's balance. The plugin has no key widget or secret
+Use trusted workflows and protect access to the ComfyUI server. Account connections
+and environment credentials apply to that server process: another person who can
+execute its nodes may spend the selected Key's balance. The plugin has no key widget or secret
 output, but prompts and returned signed result URLs can still appear in normal
 ComfyUI workflow/output metadata. See [PRIVACY.md](PRIVACY.md).
+
+Account connection state is separate from the submission journal. It contains a
+revocable connection token and short-lived pending proofs in a private JSON file:
+`~/.local/share/apixly/comfyui/connection.json` by default on macOS/Linux, or under
+`LOCALAPPDATA` on Windows. `APIXLY_CONNECTION_DIR` can select a server-owned
+location. The directory is mode `0700` and the file `0600` on POSIX; it is never
+stored in ComfyUI's browser-readable userdata or a workflow. Disconnect revokes
+the connection, rather than deleting your underlying API Key.
 
 ## Development and release checks
 
 ```sh
 python -m pytest -q
-node --test tests/frontend.test.mjs
+node --test tests/*.test.mjs
 python -m compileall -q apixly_media
 python -m pip wheel --no-build-isolation --no-deps . --wheel-dir /absolute/path/to/artifacts
 ```
