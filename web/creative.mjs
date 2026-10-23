@@ -1,10 +1,11 @@
 import "./creative-compiler.js";
 import {
-  applyDrag, kindForNode, nudgeAngles, payloadForCompose, projectPoint,
+  applyDrag, controlTransaction, isControlUpdate, kindForNode, nudgeAngles, payloadForCompose, projectPoint,
   resetControl, settingsForNode, updateControl, widgetValues,
 } from "./creative-helpers.mjs";
 
 const PANELS = new WeakMap();
+const CALLBACKS = new WeakSet();
 const TITLES = { angle: "Viewpoint", lighting: "Lighting", camera: "Camera & Lens", compose: "Final prompt" };
 const PRESETS = {
   angle: [["custom", "Custom"], ["front_high", "High angle"], ["front_low", "Low angle"],
@@ -207,11 +208,23 @@ export function attachCreativePanel(node, app) {
   for (const native of node.widgets || []) {
     if (native.name === "apixly_creative") continue;
     const previous = native.callback;
-    native.callback = function (value, ...args) { previous?.call(this, value, ...args); updateControl(node, native.name, value); refreshAll(app); };
+    native.callback = function (value, ...args) {
+      if (CALLBACKS.has(native)) return;
+      CALLBACKS.add(native);
+      try {
+        previous?.call(this, value, ...args);
+        if (!isControlUpdate(node)) { updateControl(node, native.name, value); refreshAll(app); }
+      } finally { CALLBACKS.delete(native); }
+    };
   }
+  const configure = node.configure;
+  if (configure) node.configure = function (...args) {
+    try { return controlTransaction(node, () => configure.apply(this, args)); }
+    finally { refreshAll(app); }
+  };
   for (const hook of ["onConnectionsChange", "onConfigure", "onAdded"]) {
     const previous = node[hook];
-    node[hook] = function (...args) { previous?.apply(this, args); refreshAll(app); };
+    node[hook] = function (...args) { previous?.apply(this, args); if (!isControlUpdate(node)) refreshAll(app); };
   }
   const previous = node.onExecuted;
   node.onExecuted = function (message) {

@@ -96,3 +96,37 @@ test("camera has an accessible native lens diagram", () => {
   setup([node]);
   assert.ok(all(node.panel).some(e => e.getAttribute("aria-label") === "Lens style diagram"));
 });
+
+test("Vue native widget setters can call callbacks without recursive writes or preset loss", () => {
+  const node = fakeNode("ApixlyPromptViewpoint", { enabled: false, preset: "custom", yaw: 70, pitch: -20, shot: "none" });
+  let writes = 0;
+  const callbacks = {};
+  for (const widget of node.widgets) {
+    widget.callback = () => { callbacks[widget.name] = (callbacks[widget.name] || 0) + 1; };
+    let current = widget.value;
+    Object.defineProperty(widget, "value", {
+      get() { return current; },
+      set(value) {
+        current = value;
+        if (++writes > 50) throw new Error("Native widget callback recursion");
+        this.callback?.(value);
+      },
+    });
+  }
+  setup([node]);
+  all(node.panel).find(e => e.tagName === "button" && e.textContent === "High angle").dispatch("click");
+  assert.equal(node.widgets.find(w => w.name === "preset").value, "front_high");
+  assert.equal(node.widgets.find(w => w.name === "pitch").value, 45);
+  assert.ok(writes <= 4);
+  assert.deepEqual(callbacks, { preset: 1, yaw: 1, pitch: 1 });
+});
+
+test("native configure restores stored controls without treating them as new user edits", () => {
+  const node = fakeNode("ApixlyPromptViewpoint", { enabled: false, preset: "custom", yaw: 0, pitch: 0, shot: "none" });
+  node.configure = function (values) { for (const w of this.widgets) { w.value = values[w.name]; w.callback?.(w.value); } };
+  setup([node]);
+  node.configure({ enabled: true, preset: "front_high", yaw: 123, pitch: -20, shot: "none" });
+  assert.equal(node.widgets.find(w => w.name === "preset").value, "front_high");
+  assert.equal(node.widgets.find(w => w.name === "yaw").value, 123);
+  assert.match(all(node.panel).find(e => e.tagName === "textarea").value, /front view, high-angle/);
+});

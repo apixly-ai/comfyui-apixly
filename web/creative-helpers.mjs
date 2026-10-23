@@ -19,6 +19,17 @@ const DIRECTIONAL = {
   front_high: { yaw: 0, pitch: 45 }, front_low: { yaw: 0, pitch: -45 },
   aerial_top_down: { yaw: 0, pitch: 80 }, back: { yaw: 180, pitch: 0 },
 };
+const WRITING = new WeakSet();
+export function isControlUpdate(node) { return WRITING.has(node); }
+export function controlTransaction(node, action) {
+  if (WRITING.has(node)) return;
+  WRITING.add(node);
+  try { return action(); } finally { WRITING.delete(node); }
+}
+function setNative(node, name, value) {
+  const widget = node.widgets?.find(w => w.name === name);
+  if (widget && !Object.is(widget.value, value)) widget.value = value;
+}
 
 export function isCreativeNode(node) { return Object.hasOwn(CREATIVE_KINDS, node?.comfyClass); }
 export function kindForNode(node) { return CREATIVE_KINDS[node?.comfyClass] || null; }
@@ -88,23 +99,26 @@ export function projectPoint(lon, lat, viewYaw = 24, viewPitch = -16, radius = 7
 export function updateControl(node, name, value) {
   const kind = kindForNode(node);
   if (!Object.hasOwn(CONTROL_DEFAULTS[kind] || {}, name)) throw new Error("Unknown creative control.");
-  const set = (key, next) => { const widget = node.widgets?.find(w => w.name === key); if (widget) widget.value = next; };
-  set(name, value);
-  if (kind === "angle") {
-    if (name === "preset" && DIRECTIONAL[value]) for (const [key, next] of Object.entries(DIRECTIONAL[value])) set(key, next);
-    if (name === "yaw" || name === "pitch") set("preset", "custom");
-  }
-  if (kind === "lighting") {
-    if (name === "light_yaw" || name === "light_pitch") set("direction", "orbit");
-    if (name === "key_light") set("direction", "legacy");
-    if (name === "color") set("use_color", true);
-  }
-  if (kind === "camera" && name === "focal") set("use_focal", true);
+  return controlTransaction(node, () => {
+    const set = (key, next) => setNative(node, key, next);
+    set(name, value);
+    if (kind === "angle") {
+      if (name === "preset" && DIRECTIONAL[value]) for (const [key, next] of Object.entries(DIRECTIONAL[value])) set(key, next);
+      if (name === "yaw" || name === "pitch") set("preset", "custom");
+    }
+    if (kind === "lighting") {
+      if (name === "light_yaw" || name === "light_pitch") set("direction", "orbit");
+      if (name === "key_light") set("direction", "legacy");
+      if (name === "color") set("use_color", true);
+    }
+    if (kind === "camera" && name === "focal") set("use_focal", true);
+  });
 }
 
 export function resetControl(node) {
-  for (const [name, value] of Object.entries(CONTROL_DEFAULTS[kindForNode(node)] || {})) {
-    const widget = node.widgets?.find(w => w.name === name);
-    if (widget) widget.value = value;
-  }
+  return controlTransaction(node, () => {
+    for (const [name, value] of Object.entries(CONTROL_DEFAULTS[kindForNode(node)] || {})) {
+      setNative(node, name, value);
+    }
+  });
 }
