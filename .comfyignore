@@ -7,3 +7,4 @@ dist/
 .env*
 *.sqlite3*
 scripts/
+assets/social-preview.*
