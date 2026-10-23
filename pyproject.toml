@@ -5,7 +5,7 @@ build-backend = "setuptools.build_meta"
 [project]
 name = "comfyui-apixly"
 version = "0.1.0"
-description = "Resumable Apixly image generation, image editing, and video REST nodes for ComfyUI"
+description = "Create images and videos with apixly.ai. Resume tasks in ComfyUI; get API keys, models and usage at platform.apixly.ai."
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -14,6 +14,8 @@ authors = [{ name = "Apixly", email = "support@apixly.ai" }]
 dependencies = ["httpx>=0.27,<1"]
 
 [project.urls]
+Homepage = "https://apixly.ai"
+Console = "https://platform.apixly.ai"
 Repository = "https://github.com/apixly-ai/comfyui-apixly"
 Documentation = "https://github.com/apixly-ai/comfyui-apixly#readme"
 Issues = "https://github.com/apixly-ai/comfyui-apixly/issues"
