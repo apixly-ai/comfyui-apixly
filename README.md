@@ -120,6 +120,13 @@ with instructions for the visible image-result URL workflow. Other routes may
 support local IMAGE tensors as inline PNGs, but this release does not claim
 compatibility with every route. Choose one reference source, not both.
 
+For `grok-imagine-video-1.5-preview` reference video, choose **model_default** for
+both resolution and aspect ratio. This explicitly omits those API fields and
+uses source framing. Explicit geometry for that route is not qualified and is
+rejected before a paid request, including geometry in advanced JSON. Inspect
+the decoded result for its actual dimensions; a square source can produce a
+square video. The qualified text-video preset remains 3 seconds, 720p, 16:9.
+
 Reference URLs are read once through bounded HTTPS GETs without an API key to
 verify the image and hash its content. The original URLs are sent unchanged to
 Apixly. Refreshing a signed URL for the same bytes therefore reuses the same

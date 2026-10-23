@@ -373,8 +373,8 @@ def test_public_reference_urls_are_forwarded_as_urls_without_local_upload(
         1,
         reference_image_urls=json.dumps(references),
         seconds=3,
-        resolution="720p",
-        aspect_ratio="16:9",
+        resolution="model_default",
+        aspect_ratio="model_default",
     )
     assert result["result"][0] == "209"
     assert [call[0] for call in calls] == ["GET", "GET", "POST"]
@@ -382,6 +382,8 @@ def test_public_reference_urls_are_forwarded_as_urls_without_local_upload(
     body = json.loads(calls[2][2]["body"])
     assert body["model"] == "grok-imagine-video-1.5-preview"
     assert body["images"] == references
+    assert "resolution" not in body
+    assert "aspect_ratio" not in body
     assert not any("upload" in call[1] or "assets" in call[1] for call in calls)
 
     refreshed = ["https://apixly.ai/v1/images/content?ref=fresh-signed-reference"]
@@ -392,8 +394,8 @@ def test_public_reference_urls_are_forwarded_as_urls_without_local_upload(
         1,
         reference_image_urls=json.dumps(refreshed),
         seconds=3,
-        resolution="720p",
-        aspect_ratio="16:9",
+        resolution="model_default",
+        aspect_ratio="model_default",
     )
     assert repeated["result"][0] == "209"
     assert len([call for call in calls if call[0] == "POST"]) == 1
@@ -468,6 +470,34 @@ def test_unreadable_reference_does_not_submit_a_video_or_claim_the_nonce(
             reference_image_urls="https://media.example/expired.png",
         )
     assert not list(tmp_path.glob("*.sqlite3"))
+
+
+@pytest.mark.parametrize(
+    "parameters,resolution,aspect",
+    [
+        ("{}", "720p", "16:9"),
+        ('{"resolution":"720p"}', "model_default", "model_default"),
+    ],
+)
+def test_reference_video_rejects_unqualified_explicit_geometry_before_network(
+    parameters, resolution, aspect
+):
+    with pytest.raises(ValueError, match="not qualified"):
+        NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+            "grok-imagine-video-1.5-preview",
+            "prompt",
+            parameters,
+            1,
+            reference_image_urls="https://media.example/image.png",
+            resolution=resolution,
+            aspect_ratio=aspect,
+        )
+
+
+def test_video_ui_offers_explicit_model_default_geometry():
+    required = NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"].INPUT_TYPES()["required"]
+    assert "model_default" in required["resolution"][0]
+    assert "model_default" in required["aspect_ratio"][0]
 
 
 def test_examples_are_importable_graphs_with_exact_registered_node_types():

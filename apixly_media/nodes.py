@@ -355,11 +355,11 @@ class ApixlyVideoSubmit:
             },
         )
         inputs["resolution"] = (
-            ["720p", "480p", "1080p", "768p", "1440p", "4k"],
+            ["720p", "480p", "1080p", "768p", "1440p", "4k", "model_default"],
             {"default": "720p"},
         )
         inputs["aspect_ratio"] = (
-            ["16:9", "9:16", "1:1", "21:9", "3:4", "4:3", "adaptive"],
+            ["16:9", "9:16", "1:1", "21:9", "3:4", "4:3", "adaptive", "model_default"],
             {"default": "16:9"},
         )
         return {
@@ -399,11 +399,36 @@ class ApixlyVideoSubmit:
                 "grok-imagine-video-1.5-preview requires public HTTPS references. Connect Image: Result result_urls_json to reference_image_urls; no upload or generation was submitted."
             )
         parameters = parse_parameters(parameters_json)
+        if model == "grok-imagine-video-1.5-preview" and (
+            urls or reference_images is not None
+        ):
+            geometry_fields = {
+                "resolution",
+                "aspect_ratio",
+                "size",
+                "ratio",
+                "width",
+                "height",
+            }
+            if (
+                resolution not in {None, "model_default"}
+                or aspect_ratio not in {None, "model_default"}
+                or geometry_fields.intersection(parameters)
+            ):
+                raise ValueError(
+                    "Explicit geometry is not qualified for this reference-video route. Set resolution and aspect_ratio to model_default and remove geometry fields from advanced JSON. Source framing is used; actual dimensions are reported by the result."
+                )
         for name, value in {
             "seconds": seconds,
             "resolution": resolution,
             "aspect_ratio": aspect_ratio,
         }.items():
+            if name in {"resolution", "aspect_ratio"} and value == "model_default":
+                if name in parameters:
+                    raise ValueError(
+                        f"{name}=model_default conflicts with the explicit value in advanced JSON."
+                    )
+                continue
             if value is not None:
                 if name in parameters and parameters[name] != value:
                     raise ValueError(
