@@ -1,6 +1,8 @@
 import { app } from "../../scripts/app.js";
 import { api } from "../../scripts/api.js";
 import { nativeDownloadURL, safeResultURL } from "./helpers.mjs";
+import { isCreativeNode } from "./creative-helpers.mjs";
+import { attachCreativePanel } from "./creative.mjs";
 
 const LINKS = [
   ["Apixly website", "https://apixly.ai"],
@@ -48,6 +50,10 @@ app.registerExtension({
     node.color = "#152b49";
     node.bgcolor = "#0f172a";
     node.boxcolor = "#2e8fff";
+    if (isCreativeNode(node)) {
+      attachCreativePanel(node, app);
+      return;
+    }
     const panel = document.createElement("div");
     panel.dataset.apixlyResult = "true";
     panel.style.cssText = "box-sizing:border-box;display:flex;flex-direction:column;gap:9px;padding:12px;border:1px solid #2e8fff44;border-radius:10px;background:linear-gradient(145deg,#2e8fff10,#06070a99);color:#e2e8f0;font:12px/1.4 system-ui;overflow:auto;pointer-events:auto";

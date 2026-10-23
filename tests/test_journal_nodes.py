@@ -86,6 +86,19 @@ def test_all_nodes_have_no_secret_inputs_or_credential_outputs():
             | set(spec.get("optional", {}))
             | set(spec.get("hidden", {}))
         )
+        if "key_light" in names:
+            # A fixed cinematography direction enum, never an API credential.
+            assert node.__name__ == "ApixlyPromptLighting"
+            assert spec["required"]["key_light"][0] == [
+                "none",
+                "left",
+                "top",
+                "right",
+                "front",
+                "bottom",
+                "back",
+            ]
+            names.remove("key_light")
         assert not any(
             "key" in name.lower()
             or "token" in name.lower()

@@ -18,6 +18,12 @@ from .client import (
     public_receipt,
     safe_media_url,
 )
+from .creative_nodes import (
+    ApixlyPromptCamera,
+    ApixlyPromptCompose,
+    ApixlyPromptLighting,
+    ApixlyPromptViewpoint,
+)
 from .journal import SubmissionJournal
 
 
@@ -592,6 +598,10 @@ NODE_CLASS_MAPPINGS = {
         ApixlyVideoSubmit,
         ApixlyTaskStatus,
         ApixlyVideoResult,
+        ApixlyPromptViewpoint,
+        ApixlyPromptLighting,
+        ApixlyPromptCamera,
+        ApixlyPromptCompose,
     )
 }
 NODE_DISPLAY_NAME_MAPPINGS = {
@@ -601,4 +611,8 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ApixlyVideoSubmit": "Apixly Video: Submit",
     "ApixlyTaskStatus": "Apixly Task: Status",
     "ApixlyVideoResult": "Apixly Video: Result",
+    "ApixlyPromptViewpoint": "Apixly Prompt: Viewpoint",
+    "ApixlyPromptLighting": "Apixly Prompt: Lighting",
+    "ApixlyPromptCamera": "Apixly Prompt: Camera & Lens",
+    "ApixlyPromptCompose": "Apixly Prompt: Compose",
 }
