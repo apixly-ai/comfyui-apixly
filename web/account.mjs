@@ -1,4 +1,5 @@
 import { catalogEntries, createAccountBridge, setExactModel } from "./account-helpers.mjs";
+import { authorizationEnvironment, authorizationInfo, createAuthorizationLauncher } from "./authorization.mjs";
 
 const STYLE = "box-sizing:border-box;display:flex;flex-direction:column;gap:12px;min-width:0;max-width:100%;padding:16px;border:1px solid #2e8fff30;border-radius:14px;background:linear-gradient(145deg,#0f172ae6,#06070af2);color:#e2e8f0;font:13px/1.6 system-ui;overflow-wrap:anywhere";
 const CONTROL = "box-sizing:border-box;min-height:44px;min-width:44px;max-width:100%;border:1px solid #2e8fff55;border-radius:9px;background:#1670f018;color:inherit;padding:9px 12px;font:inherit;cursor:pointer";
@@ -23,10 +24,52 @@ function identity(state) {
   const account = state.account || {};
   return JSON.stringify([account.mode, account.connected, account.connection_id, account.selected_key?.id, account.selection_revision]);
 }
-export function mountAccount(root, bridge) {
-  let busy = false, error = "", timer, disposed = false;
+export function mountAccount(root, bridge, environment = {}) {
+  const browser = authorizationEnvironment(environment), launcher = createAuthorizationLauncher(browser);
+  let busy = false, error = "", timer, disposed = false, beginning = false, beginEpoch = 0;
+  let activeURI = "", previousURI = "", openNotice = "", copyNotice = "", copying = false, linkField;
   root.style.cssText = STYLE;
   root.dataset.apixlyAccount = "true";
+  function clearAuthorization() {
+    activeURI = ""; openNotice = ""; copyNotice = ""; copying = false; linkField = undefined;
+    launcher.release();
+  }
+  function currentAuthorization() { return authorizationInfo(bridge.value().account?.authorization, browser.now()); }
+  async function begin() {
+    if (busy || disposed) return;
+    const epoch = ++beginEpoch;
+    previousURI = activeURI; clearAuthorization();
+    beginning = true; busy = true; error = "";
+    launcher.prepare(); // This call stays synchronous inside the real click.
+    render(bridge.value());
+    try {
+      await bridge.action("begin");
+      if (disposed || epoch !== beginEpoch) return;
+      const info = currentAuthorization();
+      if (info.state === "pending") openNotice = launcher.navigate(info.uri);
+      else { launcher.release(); error = info.state === "expired" ? "Authorization link expired. Connect again to request a new link." : "The connection service returned an invalid authorization link. Connect again."; }
+    } catch (failure) { launcher.release(); if (!disposed && epoch === beginEpoch) error = failure.message; }
+    finally { if (!disposed && epoch === beginEpoch) { beginning = false; busy = false; render(bridge.value()); } }
+  }
+  function openAuthorization() {
+    const info = currentAuthorization();
+    if (disposed || info.state !== "pending" || info.uri !== activeURI) { render(bridge.value()); return; }
+    openNotice = launcher.open(info.uri); render(bridge.value());
+  }
+  async function copyAuthorization() {
+    const info = currentAuthorization();
+    if (disposed || copying || info.state !== "pending" || info.uri !== activeURI) { render(bridge.value()); return; }
+    const uri = info.uri; copying = true; copyNotice = ""; render(bridge.value());
+    let failed = false, notice;
+    try { await browser.copyText(uri); notice = "Link copied."; }
+    catch { failed = true; notice = "Could not copy automatically. Select the link below and copy it manually."; }
+    finally {
+      if (!disposed && activeURI === uri && currentAuthorization().state === "pending") {
+        copying = false; copyNotice = notice; render(bridge.value());
+        if (failed) { linkField?.focus(); linkField?.select(); }
+      }
+    }
+  }
   async function act(action, key) {
     if (busy || disposed) return;
     busy = true; error = ""; render(bridge.value());
@@ -36,9 +79,16 @@ export function mountAccount(root, bridge) {
   }
   function render(state = {}) {
     if (disposed) return;
-    clearTimeout(timer);
+    browser.cancelTimer(timer);
     root.replaceChildren();
     const account = state.account || {};
+    const pending = account.authorization;
+    let authorization = authorizationInfo(pending, browser.now());
+    if (beginning && authorization.uri === previousURI) authorization = { state: "none" };
+    if (authorization.state === "pending" && authorization.uri !== activeURI) {
+      activeURI = authorization.uri; openNotice = ""; copyNotice = ""; copying = false;
+      if (!beginning) launcher.release();
+    } else if (authorization.state !== "pending" && !beginning) clearAuthorization();
     root.append(el("div", "APIXLY · CREATIVE CONNECTION", "font-size:11px;letter-spacing:.12em;color:#2e8fff;font-weight:650"), el("h2", "Your account. Your models.", "margin:0;font-size:22px;line-height:1.3"));
     root.append(el("p", "Connect your existing Apixly account. Use your Studixly Key by default, or choose an active Key you already own.", "margin:0;color:#94a3b8"));
     const current = el("div", undefined, "padding:12px;border:1px solid #ffffff12;border-radius:10px;background:#ffffff04");
@@ -49,25 +99,37 @@ export function mountAccount(root, bridge) {
     root.append(current);
     if (error) { const notice = el("p", error, "margin:0;color:#fbbf24"); notice.setAttribute("role", "alert"); root.append(notice); }
     const actions = el("div", undefined, "display:flex;flex-wrap:wrap;gap:8px");
-    actions.append(button("Connect / reconnect ↗", () => act("begin")));
+    actions.append(button("Connect / reconnect ↗", begin));
     if (account.connected) {
       actions.append(button("Refresh account", () => act("refresh")));
       if (account.mode !== "account") actions.append(button("Use connected account", () => act("use_account")));
       actions.append(button("Disconnect account", () => act("disconnect")));
     }
     root.append(actions);
-    const pending = account.authorization;
-    if (pending?.status === "pending") {
+    if (beginning && authorization.state !== "pending") root.append(el("p", "Preparing your secure authorization link…", "margin:0;color:#94a3b8"));
+    if (authorization.state === "pending") {
       const progress = el("div", undefined, "display:flex;flex-direction:column;gap:9px;padding:14px;border:1px solid #2e8fff55;border-radius:12px;background:#2e8fff0a");
-      progress.append(el("strong", "Approve on apixly.ai"), el("code", pending.user_code, "font-size:22px;color:#7dd3fc;letter-spacing:.12em"));
-      const uri = new URL(pending.verification_uri_complete);
-      if (uri.origin === "https://apixly.ai" && uri.pathname.startsWith("/connect/")) {
-        const link = el("a", "Open authorization page ↗", CONTROL + ";text-decoration:none;text-align:center");
-        link.href = uri.href; link.target = "_blank"; link.rel = "noopener noreferrer"; progress.append(link);
+      progress.append(el("strong", "Approve on apixly.ai"), el("code", authorization.userCode, "font-size:22px;color:#7dd3fc;letter-spacing:.12em"));
+      const manual = el("div", undefined, "display:flex;flex-wrap:wrap;gap:8px");
+      for (const [label, handler] of [["Open authorization page ↗", openAuthorization], ["Copy authorization link", copyAuthorization]]) {
+        const control = button(label, handler); control.dataset.apixlyAuthorizationManual = "true";
+        if (handler === copyAuthorization) control.dataset.apixlyCopyLink = "true";
+        manual.append(control);
       }
-      progress.append(el("small", `Expires ${new Date(pending.expires_at * 1000).toLocaleTimeString()}. Waiting does not generate media.`, "color:#94a3b8"));
+      progress.append(manual);
+      if (openNotice || copyNotice) { const notice = el("p", [openNotice, copyNotice].filter(Boolean).join(" "), "margin:0;color:#7dd3fc"); notice.setAttribute("role", "status"); notice.setAttribute("aria-live", "polite"); progress.append(notice); }
+      const label = el("label", "Authorization link", "display:flex;flex-direction:column;gap:6px;min-width:0");
+      linkField = el("input", undefined, CONTROL + ";width:100%;min-width:0;cursor:text");
+      linkField.type = "url"; linkField.readOnly = true; linkField.value = authorization.uri; linkField.setAttribute("aria-label", "Authorization link"); label.append(linkField); progress.append(label);
+      progress.append(el("small", `Expires ${new Date(authorization.expires * 1000).toLocaleTimeString()}. Waiting does not generate media.`, "color:#94a3b8"));
       progress.append(button("Cancel connection", () => act("cancel"))); root.append(progress);
-      if (!busy) timer = setTimeout(() => act("poll"), Math.max(5, pending.interval || 5) * 1000);
+      if (!busy) timer = browser.schedule(() => {
+        if (currentAuthorization().state !== "pending") render(bridge.value());
+        else act("poll");
+      }, Math.max(1, Math.min(Math.max(5, pending.interval || 5) * 1000, authorization.expires * 1000 - browser.now())));
+    } else if (authorization.state === "expired" || authorization.state === "invalid") {
+      const notice = el("p", authorization.state === "expired" ? "Authorization link expired. Connect again to request a new link." : "The connection service returned an invalid authorization link. Connect again.", "margin:0;color:#fbbf24");
+      notice.setAttribute("role", "alert"); root.append(notice, button("Cancel connection", () => act("cancel")));
     }
     if (account.mode === "account" && account.connected) {
       const label = el("label", "API Key", "display:flex;flex-direction:column;gap:7px");
@@ -85,12 +147,12 @@ export function mountAccount(root, bridge) {
     const links = el("div", undefined, "display:flex;flex-wrap:wrap;gap:8px");
     for (const [text, href] of [["apixly.ai", "https://apixly.ai"], ["Models & prices", "https://platform.apixly.ai/models"], ["Manage Keys", "https://platform.apixly.ai/keys"], ["Connected plugins", "https://apixly.ai/integrations"]]) { const link = el("a", text + " ↗", CONTROL + ";text-decoration:none"); link.href = href; link.target = "_blank"; link.rel = "noopener noreferrer"; links.append(link); }
     root.append(links, el("small", "Free plugin · generation uses your Apixly balance. Account connection and catalog browsing do not generate media.", "color:#64748b"));
-    for (const control of root.querySelectorAll("button,select")) control.disabled = busy;
+    for (const control of root.querySelectorAll("button,select")) control.disabled = control.dataset.apixlyAuthorizationManual ? beginning || Boolean(control.dataset.apixlyCopyLink && copying) : busy;
   }
   const unsubscribe = bridge.subscribe(render);
   render(bridge.value());
   bridge.read(true).catch(failure => { error = failure.message; render(bridge.value()); });
-  return () => { disposed = true; clearTimeout(timer); unsubscribe(); root.replaceChildren(); };
+  return () => { disposed = true; beginEpoch++; browser.cancelTimer(timer); clearAuthorization(); unsubscribe(); root.replaceChildren(); };
 }
 
 export function attachModelPicker(node, app, bridge) {

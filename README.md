@@ -102,8 +102,13 @@ The package is also listed on [Comfy Registry](https://registry.comfy.org/publis
 ### 2. Connect your account
 
 Start or restart ComfyUI, open the **Apixly sidebar**, and choose **Connect / reconnect**.
-Check the short code and click **Open authorization page** for the official
-[apixly.ai](https://apixly.ai) approval page. Sign in
+The click prepares a new tab and opens the official [apixly.ai](https://apixly.ai)
+approval page when the short-lived link is ready. Check the short code. If your
+browser blocks the new tab, use **Open authorization page** or **Copy authorization
+link**. These actions reuse the same pending connection; they do not create another
+request. If clipboard access fails, select the displayed read-only link and copy
+it manually. Cancelled, expired and completed links disappear from the sidebar.
+Sign in
 normally, review the requesting plugin and approve **your own Studixly Key
 (default)** or another active Key from your account. Return to ComfyUI to finish.
 Your website password and login JWT never enter the plugin.
@@ -244,6 +249,10 @@ Use **Apixly Image: Edit** and connect Load Image to `reference_images` to edit 
 is sent as separate PNG reference files. The selected model must support the
 operation and fields. References are never silently discarded or duplicated.
 Mixed-size result batches are reported instead of being resized without permission.
+
+Temporary image results currently expire after about ten minutes. Download them
+promptly or connect Image Result → Save Image. The plugin's temporary preview
+files may be cleared when ComfyUI restarts; keep a saved local copy.
 
 **Masked inpainting is unavailable in this release.** The public nodes do not
 expose a MASK input and reject explicit masks before a paid request. Low-level

@@ -34,6 +34,10 @@ until the flow is completed, cancelled or replaced. The browser receives only
 public connection metadata and an approval URL/short user code, never the private
 device proof or token. Native controls use same-origin checks and a process-local
 CSRF nonce, rather than trusting Comfy browser client IDs as account identities.
+Connect prepares a blank tab in its click gesture, removes its opener, then
+navigates to the validated public approval URL. Manual Open and Copy actions use
+that same URL. No device proof is copied, placed in a workflow or sent to a new
+browser tab.
 
 No credential is a node widget or output. The plugin has no analytics, telemetry,
 remote executable-code loading or background generation. Standard HTTP requests
