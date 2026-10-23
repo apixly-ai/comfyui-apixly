@@ -36,6 +36,40 @@ a Comfy Partner Node. Selected 1K image generation costs **US$0.02 per image** a
 checked on October 23, 2026; see [current model prices](https://platform.apixly.ai/models)
 for your model and settings.
 
+## Original tools, inside ComfyUI
+
+<p align="center">
+  <a href="assets/screenshots/expression-compose-v2.png"><img src="assets/screenshots/expression-compose-v2.png" alt="Real free Expression grid connected to Compose V2, with a joyful expression instruction." width="48%"></a>
+  <a href="assets/screenshots/image-grid-split.png"><img src="assets/screenshots/image-grid-split.png" alt="Real offline Grid Split: the source image, a 2 by 2 grid and four tile previews displayed as a mosaic." width="48%"></a>
+</p>
+<p align="center">
+  <a href="assets/screenshots/enhancement-prompt.png"><img src="assets/screenshots/enhancement-prompt.png" alt="Free Enhancement Prompt uses the connected image dimensions and outputs an exact model and 1K parameters." width="48%"></a>
+  <a href="assets/screenshots/character-sheet-plan.png"><img src="assets/screenshots/character-sheet-plan.png" alt="Free Character Sheet Plan with one selected shot, beside the previously generated and saved character example." width="48%"></a>
+</p>
+
+These are actual offline utility nodes and stock previews. Click a capture to
+inspect it. Grid Split returns four separate tiles; the stock preview arranges
+them as a mosaic. The character picture is a saved example loaded separately,
+not an automatic output of the free planner. On small screens, use the host's
+**Hide Minimap** control if the map covers your nodes.
+
+## One planned shot, two reference edits
+
+<p align="center">
+  <a href="assets/examples/character-neutral.jpg"><img src="assets/examples/character-neutral.jpg" alt="Original generated character: a neutral red-haired astronaut in a white and orange flight suit." width="32%"></a>
+  <a href="assets/examples/character-smile.png"><img src="assets/examples/character-smile.png" alt="Expression and Compose V2 reference edit: the same character with a broad joyful smile." width="32%"></a>
+  <a href="assets/examples/character-enhanced.jpg"><img src="assets/examples/character-enhanced.jpg" alt="AI redraw enhancement of the original neutral character, retaining the costume and scene." width="32%"></a>
+</p>
+
+**Left:** one explicitly selected character plan, generated with `grok-imagine-image`.
+**Center:** Expression → Compose V2 → `gemini-3.1-flash-image` reference edit.
+**Right:** Enhancement Prompt → the same Gemini model. Both edits used the saved
+original on the left. These are unretouched original API files, with provider
+metadata retained. The request used 2:3; actual outputs are 768 × 1152,
+848 × 1264 and 843 × 1264. The first image omits the feet despite a full-body
+instruction. AI redraw may alter fine details; this example does not establish
+pixel-preserving upscaling or guaranteed improvement.
+
 ## See it in ComfyUI
 
 ![Actual ComfyUI canvas showing the Apixly Video Submit and Result nodes, a completed video preview, and copy and download controls.](assets/screenshots/video-workflow.png)
@@ -440,6 +474,15 @@ node --test tests/*.test.mjs
 python -m compileall -q apixly_media
 python -m pip wheel --no-build-isolation --no-deps . --wheel-dir /absolute/path/to/artifacts
 ```
+
+Version 0.3.0 passed **672 Python and 244 JavaScript checks**, plus an official
+ComfyUI frontend 1.57.1 installation. Native template/JSON loading, desktop and
+375px panel bounds, 44px panel controls, wheel scrolling, copy/reset and saved
+camera/node sizes were checked. Odd RGB/RGBA and batch tiles reconstructed the
+pixels entering Grid Split exactly. Three separately gated live image actions
+completed, and original API files plus native downloads were decoded and saved.
+The gallery describes their actual output limits. Physical touch/iOS was not
+tested by the headless browser checks.
 
 Tests run offline with a fake HTTP transport, temporary journals, and real image
 tensor conversion. Live model qualification and billing checks are separate and

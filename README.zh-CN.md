@@ -11,6 +11,27 @@
 
 插件免费；模型生成按你的 Apixly 账号余额计费。模型目录代表可发现的权限，不代表每个模型/参数都已完成质量验收。当前价格以[模型页面](https://platform.apixly.ai/models)为准。
 
+## 实机界面与真实样例
+
+<p align="center">
+  <a href="assets/screenshots/expression-compose-v2.png"><img src="assets/screenshots/expression-compose-v2.png" alt="原版 ComfyUI 实拍：表情网格连接 Compose V2，免费编排笑脸指令。" width="48%"></a>
+  <a href="assets/screenshots/image-grid-split.png"><img src="assets/screenshots/image-grid-split.png" alt="原版实拍：原图、2×2 切图与四块图片的拼接预览。" width="48%"></a>
+</p>
+<p align="center">
+  <a href="assets/screenshots/enhancement-prompt.png"><img src="assets/screenshots/enhancement-prompt.png" alt="增强指令节点从实际参考图取得画幅，输出精确模型和 1K 参数。" width="48%"></a>
+  <a href="assets/screenshots/character-sheet-plan.png"><img src="assets/screenshots/character-sheet-plan.png" alt="角色计划节点明确选择一个镜头，旁边单独载入已生成保存的角色样例。" width="48%"></a>
+</p>
+
+截图只有免费工具与宿主预览节点，点击可看大图。切图实际输出四张独立图片，宿主 Preview 将它们拼成马赛克式预览；角色图片是单独载入的已保存样例，免费计划节点不会自动生成。小屏若被宿主小地图遮住，可使用 **Hide Minimap**。
+
+<p align="center">
+  <a href="assets/examples/character-neutral.jpg"><img src="assets/examples/character-neutral.jpg" alt="从一个明确选中的角色计划生成的中性表情宇航员原图。" width="32%"></a>
+  <a href="assets/examples/character-smile.png"><img src="assets/examples/character-smile.png" alt="表情与 Compose V2 参考编辑后的笑脸。" width="32%"></a>
+  <a href="assets/examples/character-enhanced.jpg"><img src="assets/examples/character-enhanced.jpg" alt="同一中性原图经过 AI 重绘增强后的实际结果。" width="32%"></a>
+</p>
+
+左图由 `grok-imagine-image` 生成；中图由表情 → Compose V2 → `gemini-3.1-flash-image` 编辑；右图使用增强指令 → 同一 Gemini 模型。两次编辑都引用左侧已保存原图。这里保留原 API 文件字节和提供方元数据，没有后期修图。请求画幅为 2:3，实际尺寸依次是 768×1152、848×1264、843×1264。原计划虽写全身，第一张实际没有拍到脚；AI 重绘也可能改变细节，不能据此承诺像素不变的超分或一定更好。
+
 ## 安装和连接
 
 从 [Comfy Registry](https://registry.comfy.org/publishers/apixly/nodes/comfyui-apixly) 安装，或把仓库克隆到 `ComfyUI/custom_nodes/comfyui-apixly`，在实际 ComfyUI Python 环境安装 `requirements.txt` 后重启。详细命令见[英文安装说明](README.md#install)。
@@ -68,4 +89,4 @@
 
 安装测试依赖 `python -m pip install -e '.[test]'`，再执行 `python -m pytest -q` 与 `node --test tests/*.test.mjs`。测试 extra 包含 NumPy，运行环境使用宿主 ComfyUI 已有的 PyTorch/NumPy/Pillow。原网页 381e TypeScript 差分 fixture 保留来源哈希；字面插值修复使用单独回归 fixture，未伪造为旧网页输出。
 
-本地/夹具测试只验证编排、参数、像素切片与交互规则；新增功能的原版宿主与真实模型效果须独立验收。支持：[support@apixly.ai](mailto:support@apixly.ai) · [API 文档](https://apixly.ai/docs) · [账号与用量](https://platform.apixly.ai)。
+本版已通过 **672 项 Python、244 项 JavaScript 检查**，并在原版 ComfyUI frontend 1.57.1 完成 Templates/JSON 载入、桌面和 375px 面板边界与 44px 触点、真实滚轮到达复制/重置、保存自定义画布与节点尺寸的恢复。RGB/RGBA、奇数尺寸和多图切块均对照进入切图节点的像素逐项恢复；三笔独立放行的真实图片请求完成，原 API 文件及原生下载均已解码保存。实际模型边界见上方样例；headless 浏览器不代表已实测触摸或 iOS。支持：[support@apixly.ai](mailto:support@apixly.ai) · [API 文档](https://apixly.ai/docs) · [账号与用量](https://platform.apixly.ai)。
