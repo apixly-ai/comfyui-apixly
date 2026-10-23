@@ -186,7 +186,7 @@ def test_image_result_has_native_thumbnail_and_receipt(tmp_path, monkeypatch):
     preview = result["ui"]["images"][0]
     assert (tmp_path / preview["subfolder"] / preview["filename"]).exists()
     assert preview["type"] == "temp"
-    assert result["ui"]["apixly"][0]["id"] == "205"
+    assert result["ui"]["apixly"][0]["task_id"] == "205"
     assert result["result"][0].shape == (1, 8, 8, 3)
 
 
@@ -234,6 +234,20 @@ def test_video_node_exposes_duration_resolution_and_aspect_ratio():
     assert required["seconds"][1]["default"] == 3
     assert "720p" in required["resolution"][0]
     assert "16:9" in required["aspect_ratio"][0]
+
+
+def test_task_identity_survives_comfy_cached_ui_asset_id_cleanup():
+    from apixly_media.nodes import _ui_result
+
+    ui = _ui_result(("207",), {"id": "207", "status": "queued"}, "video")["ui"]
+    # ComfyUI comfy_execution.asset_enrichment._strip_ids removes top-level `id`
+    # from every dictionary in every UI list when replaying cached outputs.
+    for entries in ui.values():
+        if isinstance(entries, (list, tuple)):
+            for entry in entries:
+                if isinstance(entry, dict):
+                    entry.pop("id", None)
+    assert ui["apixly"][0]["task_id"] == "207"
 
 
 def test_examples_are_importable_graphs_with_exact_registered_node_types():

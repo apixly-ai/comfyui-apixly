@@ -170,7 +170,7 @@ def _progress():
 
 def _ui_result(values, job, kind, preview=None):
     detail = {
-        "id": job.get("id", ""),
+        "task_id": job.get("id", ""),
         "status": job.get("status", "unknown"),
         "kind": kind,
         "url": job.get("url", ""),
@@ -178,7 +178,7 @@ def _ui_result(values, job, kind, preview=None):
     if not detail["url"] and job.get("data"):
         detail["url"] = job["data"][0].get("url", "")
     ui = {
-        "text": [f"{kind.title()} task {detail['id']}: {detail['status']}"],
+        "text": [f"{kind.title()} task {detail['task_id']}: {detail['status']}"],
         "apixly": [detail],
     }
     if preview:
@@ -216,7 +216,15 @@ class ApixlyImageSubmit:
     def INPUT_TYPES(cls):
         return {
             "required": _submit_inputs(),
-            "optional": {"reference_images": ("IMAGE",), "mask": ("MASK",)},
+            "optional": {
+                "reference_images": ("IMAGE",),
+                "mask": (
+                    "MASK",
+                    {
+                        "tooltip": "Experimental mask forwarding. Strict region preservation is not qualified; providers may edit outside the mask."
+                    },
+                ),
+            },
         }
 
     def submit(
@@ -259,7 +267,17 @@ class ApixlyImageEdit(ApixlyImageSubmit):
     def INPUT_TYPES(cls):
         required = _submit_inputs("gemini-3.1-flash-image")
         required["reference_images"] = ("IMAGE",)
-        return {"required": required, "optional": {"mask": ("MASK",)}}
+        return {
+            "required": required,
+            "optional": {
+                "mask": (
+                    "MASK",
+                    {
+                        "tooltip": "Experimental mask forwarding. Strict region preservation is not qualified; providers may edit outside the mask."
+                    },
+                )
+            },
+        }
 
 
 class ApixlyImageResult:

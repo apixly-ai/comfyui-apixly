@@ -93,6 +93,14 @@ The selected model must support the operation and fields. Mask and references
 are never silently discarded or duplicated. Mixed-size result batches are
 reported instead of being resized without permission.
 
+**Mask forwarding is experimental, and strict region preservation is not
+qualified for this release.** A bounded `gpt-image-2.5-flare` test returned an
+image and preserved the main vase, but most added red-star pixels fell outside
+the transparent mask region. That successful HTTP/task result is not a successful
+strict-inpainting test. Use an independently qualified model/workflow before
+relying on untouched pixels. The plugin forwards the mask without silently
+removing it or claiming the provider obeyed it.
+
 ### Video generation
 
 Connect Video Submit → Video Result. Model-specific options are flat JSON, for
@@ -108,7 +116,7 @@ in `parameters_json`. They are sent to the gateway as supplied. Do not put
 private account credentials in these URLs. Reference limits, task modes, output
 duration, resolution, and billing are model dependent; inspect current video
 capabilities before choosing them. This initial version supports `/v1/videos`
-generation, not the separate `/v1/video/edits` video-edit endpoint.
+generation, not the separate `/v1/videos/edits` video-edit endpoint.
 
 Duration, resolution, and aspect ratio have dedicated video controls; conflicting
 values in advanced JSON are rejected before submission. The default is a 3-second

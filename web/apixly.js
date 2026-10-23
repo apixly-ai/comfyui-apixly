@@ -79,7 +79,7 @@ app.registerExtension({
       buttons.append(element);
       return element;
     }
-    const copyTask = button("Copy task ID", () => navigator.clipboard.writeText(detail.id));
+    const copyTask = button("Copy task ID", () => navigator.clipboard.writeText(detail.task_id));
     const copyURL = button("Copy result URL", () => navigator.clipboard.writeText(safeResultURL(detail.url)));
     const download = button("Download", () => {
       const href = nativeDownloadURL(detail.saved);
@@ -95,9 +95,10 @@ app.registerExtension({
     const previous = node.onExecuted;
     node.onExecuted = function (message) {
       previous?.apply(this, arguments);
-      detail = message?.apixly?.[0] || {};
-      status.textContent = detail.id ? `${detail.kind === "video" ? "Video" : "Image"} task ${detail.id} · ${detail.status}` : "No completed task receipt received.";
-      copyTask.disabled = !detail.id;
+      const receipt = message?.apixly?.[0] || {};
+      detail = { ...receipt, task_id: receipt.task_id || receipt.id || "" };
+      status.textContent = detail.task_id ? `${detail.kind === "video" ? "Video" : "Image"} task ${detail.task_id} · ${detail.status}` : "No completed task receipt received.";
+      copyTask.disabled = !detail.task_id;
       copyURL.disabled = !safeResultURL(detail.url);
       download.disabled = !nativeDownloadURL(detail.saved);
       app.graph.setDirtyCanvas(true, true);
