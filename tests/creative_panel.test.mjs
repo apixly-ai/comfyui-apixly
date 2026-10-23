@@ -130,3 +130,14 @@ test("native configure restores stored controls without treating them as new use
   assert.equal(node.widgets.find(w => w.name === "yaw").value, 123);
   assert.match(all(node.panel).find(e => e.tagName === "textarea").value, /front view, high-angle/);
 });
+
+test("named viewpoint preset draws its effective direction and nudges from it", () => {
+  const node = fakeNode("ApixlyPromptViewpoint", { enabled: true, preset: "front_high", yaw: 123, pitch: -20, shot: "none" });
+  setup([node]);
+  assert.equal(node.widgets.find(w => w.name === "yaw").value, 123);
+  assert.match(node.panel.textContent, /0° azimuth · \+45° elevation/);
+  all(node.panel).find(e => e.getAttribute("aria-label") === "Viewpoint up 15 degrees").dispatch("click");
+  assert.equal(node.widgets.find(w => w.name === "preset").value, "custom");
+  assert.equal(node.widgets.find(w => w.name === "yaw").value, 0);
+  assert.equal(node.widgets.find(w => w.name === "pitch").value, 60);
+});

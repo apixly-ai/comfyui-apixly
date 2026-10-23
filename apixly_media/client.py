@@ -17,6 +17,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 BASE_URL = "https://apixly.ai/v1"
+USER_AGENT = "comfyui-apixly/0.2.0"
 MAX_JSON_BYTES = 4 * 1024 * 1024
 MAX_IMAGE_BYTES = 32 * 1024 * 1024
 MAX_VIDEO_BYTES = 256 * 1024 * 1024
@@ -240,7 +241,7 @@ class ApixlyClient:
         headers = {
             "Authorization": f"Bearer {self._api_key}",
             "Accept": "application/json",
-            "User-Agent": "comfyui-apixly/0.1.0",
+            "User-Agent": USER_AGENT,
         }
         body = None
         if multipart:
@@ -441,7 +442,7 @@ class ApixlyClient:
     def _media(self, url, *, authenticated=False, max_bytes):
         url = safe_media_url(url)
         for attempt in range(6):
-            headers = {"User-Agent": "comfyui-apixly/0.1.0"}
+            headers = {"User-Agent": USER_AGENT}
             if authenticated:
                 parsed = urllib.parse.urlsplit(url)
                 if (

@@ -38,6 +38,11 @@ export function widgetValues(node) {
   if (!kind) throw new Error("This is not a supported prompt control.");
   return { ...CONTROL_DEFAULTS[kind], ...Object.fromEntries((node.widgets || []).map(w => [w.name, w.value])) };
 }
+export function effectiveAngles(node) {
+  const kind = kindForNode(node), values = widgetValues(node);
+  if (kind === "angle") return DIRECTIONAL[values.preset] ? { ...DIRECTIONAL[values.preset] } : { yaw: values.yaw, pitch: values.pitch };
+  return { yaw: values.light_yaw, pitch: values.light_pitch };
+}
 function unspecified(value) { return value === "none" ? "" : value; }
 function flag(value, path) {
   if (typeof value !== "boolean") throw new Error(`${path}: expected a boolean.`);

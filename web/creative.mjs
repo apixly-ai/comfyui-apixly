@@ -1,6 +1,6 @@
 import "./creative-compiler.js";
 import {
-  applyDrag, controlTransaction, isControlUpdate, kindForNode, nudgeAngles, payloadForCompose, projectPoint,
+  applyDrag, controlTransaction, effectiveAngles, isControlUpdate, kindForNode, nudgeAngles, payloadForCompose, projectPoint,
   resetControl, settingsForNode, updateControl, widgetValues,
 } from "./creative-helpers.mjs";
 
@@ -49,8 +49,7 @@ function orbit(node, kind, app) {
   const names = kind === "angle" ? ["yaw", "pitch"] : ["light_yaw", "light_pitch"];
   let view = { yaw: 24, pitch: -16 }, drag = null;
   function values() {
-    const v = widgetValues(node);
-    return { yaw: v[names[0]], pitch: v[names[1]] };
+    return effectiveAngles(node);
   }
   function set(next) {
     updateControl(node, names[0], Math.round(next.yaw * 10) / 10);
@@ -157,7 +156,7 @@ export function attachCreativePanel(node, app) {
       presetButtons.push([id, item]); presets.append(item);
     }
     row.append(presets); root.append(row);
-    root.append(el("div", "Drag the marker to set direction; drag the grid to inspect. Positive elevation is above. Diagram only.", "color:#64748b;font-size:10px"));
+    root.append(el("div", "Drag the marker to set direction; drag the grid to inspect. Positive elevation is above. Diagram only." + (kind === "angle" ? " Named presets override raw sliders; the first move switches to Custom." : ""), "color:#64748b;font-size:10px"));
   }
   if (kind === "camera") {
     const diagram = svg("svg", { viewBox: "0 0 300 90", width: "100%", height: 90, role: "img", "aria-label": "Lens style diagram" });
