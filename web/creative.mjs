@@ -37,6 +37,18 @@ function svg(tag, attrs = {}) {
   for (const [key, value] of Object.entries(attrs)) item.setAttribute(key, value);
   return item;
 }
+function studioGlyph(kind, x, y) {
+  const drawing = svg("svg", { x: x - 16, y: y - 16, width: 32, height: 32, viewBox: kind === "light" ? "0 0 32 32" : "0 0 32 30", fill: "none", "data-studixly-glyph": kind, "aria-hidden": "true" });
+  if (kind === "light") {
+    const rays = svg("g", { stroke: "#f5b544e6", "stroke-linecap": "round", "stroke-width": 1.8 });
+    for (const d of ["M16 2.5 L16 6.5", "M16 25.5 L16 29.5", "M2.5 16 L6.5 16", "M25.5 16 L29.5 16", "M6.4 6.4 L9.2 9.2", "M22.8 22.8 L25.6 25.6", "M25.6 6.4 L22.8 9.2", "M9.2 22.8 L6.4 25.6"]) rays.append(svg("path", { d }));
+    drawing.append(rays, svg("circle", { cx: 16, cy: 16, r: 6.4, fill: "#ffd66b", stroke: "#f5b544", "stroke-width": 1.6 }), svg("circle", { cx: 13.8, cy: 13.8, r: 1.7, fill: "#ffffffbf" }));
+  } else {
+    for (const [d, fill] of [["M6 11 L16 6 L27 10.5 L17 15.5 Z", "#7cc0ff"], ["M6 11 L17 15.5 L17 25 L6 20.5 Z", "#2e8fff"], ["M17 15.5 L27 10.5 L27 20 L17 25 Z", "#1670f0"], ["M11 8.6 L15 7 L18.5 8.4 L14.5 10 Z", "#7cc0ff"]]) drawing.append(svg("path", { d, fill }));
+    drawing.append(svg("ellipse", { cx: 22, cy: 16.6, rx: 2.7, ry: 3.4, transform: "rotate(-24 22 16.6)", fill: "#0b1220" }), svg("ellipse", { cx: 22, cy: 16.6, rx: 1.4, ry: 1.9, transform: "rotate(-24 22 16.6)", fill: "#3aa0ff" }), svg("path", { d: "M6 11 L16 6 L27 10.5", stroke: "#ffffff8c", "stroke-width": 0.8 }));
+  }
+  return drawing;
+}
 function button(label, action) {
   const item = el("button", label, BUTTON); item.type = "button";
   item.addEventListener("click", event => { event.preventDefault(); event.stopPropagation(); action(); });
@@ -121,16 +133,15 @@ function orbit(node, kind, app) {
       for (const pts of lines) drawing.append(svg("path", { d: path(pts, front), fill: "none", stroke: front ? "#94a3b899" : "#94a3b82b", "stroke-width": 0.8 }));
       if (!front) {
         drawing.append(svg("ellipse", { cx: 100, cy: 143, rx: 23, ry: 6, fill: "#00000066" }));
-        drawing.append(svg("rect", { x: 80, y: 64, width: 40, height: 74, rx: 14, fill: "#0f172a", stroke: "#2e8fff88" }));
-        const subject = svg("text", { x: 100, y: 106, fill: "#94a3b8", "font-size": 9, "text-anchor": "middle" }); subject.textContent = "Subject"; drawing.append(subject);
+        for (const [d, fill] of [["m100 71 23 13-23 14-23-14z", "#5aa6ff99"], ["m77 84 23 14v29l-23-14z", "#1670f066"], ["m100 98 23-14v29l-23 14z", "#635bff59"]]) drawing.append(svg("path", { d, fill }));
       }
     }
     const point = projectPoint(v.yaw, v.pitch, observation.yaw, observation.pitch, 79.5);
     drawing.append(svg("line", { x1: point.x, y1: point.y, x2: 100, y2: 100, stroke: "#2e8fff", "stroke-dasharray": "3 3", opacity: point.front ? 0.8 : 0.3 }));
     const marker = svg("g", { "data-orbit-marker": "true", cursor: "grab", opacity: point.front ? 1 : 0.55 });
     marker.append(svg("circle", { cx: point.x, cy: point.y, r: 24, fill: "transparent" }));
-    marker.append(svg("circle", { cx: point.x, cy: point.y, r: 11, fill: kind === "lighting" ? "#d9edff" : "#1670f0", stroke: "#8ec9ff", "stroke-width": 2 }));
-    marker.append(svg(kind === "lighting" ? "circle" : "rect", kind === "lighting" ? { cx: point.x, cy: point.y, r: 4, fill: "#2e8fff" } : { x: point.x - 5, y: point.y - 3, width: 10, height: 6, rx: 1, fill: "#d9edff" }));
+    marker.append(svg("rect", { x: point.x - 20, y: point.y - 20, width: 40, height: 40, rx: 9, fill: "#0f172ae6", stroke: kind === "lighting" ? "#f5b54488" : "#2e8fff88" }));
+    marker.append(studioGlyph(kind === "lighting" ? "light" : "camera", point.x, point.y));
     drawing.append(marker);
     readout.textContent = `${Math.round(v.yaw)}° azimuth · ${v.pitch > 0 ? "+" : ""}${Math.round(v.pitch)}° elevation`;
   }

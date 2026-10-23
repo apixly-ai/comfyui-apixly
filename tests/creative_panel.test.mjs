@@ -106,6 +106,14 @@ test("lighting uses the original eight Studixly gradient swatches", () => {
   assert.match(golden.style.cssText, /#fbbf24.*#f59e0b.*#b45309/);
 });
 
+test("orbit markers reuse the original Studixly camera and light glyphs", () => {
+  for (const [type, glyph] of [["ApixlyPromptViewpoint", "camera"], ["ApixlyPromptLighting", "light"]]) {
+    const node = fakeNode(type, { enabled: false });
+    setup([node]);
+    assert.ok(all(node.panel).some(item => item.getAttribute("data-studixly-glyph") === glyph));
+  }
+});
+
 test("Vue native widget setters can call callbacks without recursive writes or preset loss", () => {
   const node = fakeNode("ApixlyPromptViewpoint", { enabled: false, preset: "custom", yaw: 70, pitch: -20, shot: "none" });
   let writes = 0;
