@@ -244,7 +244,7 @@ class ApixlyImageSubmit:
     OUTPUT_NODE = True
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("task_id", "submission_json")
-    DESCRIPTION = "Submit one paid text-to-image job. Use Apixly Image: Edit for references. Credentials come only from the server environment."
+    DESCRIPTION = "Submit one paid text-to-image job. Use Apixly Image: Edit for references. Credentials stay on the ComfyUI server: connect your account in the Apixly sidebar or configure APIXLY_API_KEY."
 
     @classmethod
     def INPUT_TYPES(cls):
