@@ -1,6 +1,6 @@
 <picture>
   <source media="(max-width: 640px)" srcset="assets/hero-mobile.svg">
-  <img src="assets/hero.svg" alt="Apixly Media for ComfyUI — Images, reference edits and videos. Ten nodes, eight starter workflows, free creative prompt controls." width="1440">
+  <img src="assets/hero.svg" alt="Apixly Media for ComfyUI — Images, reference edits and videos. Fifteen nodes, twelve starter workflows, free creative and image tools." width="1440">
 </picture>
 
 # Apixly Media for ComfyUI
@@ -9,6 +9,8 @@ Generate images, edit references and create videos through [apixly.ai](https://a
 Connect your own Apixly account, choose an owned Key and discover its current models.
 Shape lighting, viewpoint and camera instructions for free, then explicitly submit
 an exact model. Preview the result and pass images, URLs or video files to the next step.
+
+**15 nodes · 12 starter workflows · [中文说明](README.zh-CN.md)**
 
 <p>
   <a href="#install"><strong>Install the nodes →</strong></a> ·
@@ -21,6 +23,7 @@ an exact model. Preview the result and pass images, URLs or video files to the n
 **MIT licensed · Python 3.10+ · No local GPU required for API generation**
 
 - **Free creative controls:** orbit diagrams, lighting presets and camera/lens instructions compose a prompt without an API call.
+- **More original Studixly tools:** expression grid and face preview, lossless image-grid slicing, AI enhancement instructions and nine character-sheet plans. Five new nodes execute offline for free.
 - **Your account and models:** authorize in your browser, choose the default Studixly Key or another owned Key, then open a live model picker.
 - **Images and reference edits:** use a dedicated editing node and pass every image in a reference batch.
 - **Text and reference video:** use explicit models and keep the resulting file or temporary URL.
@@ -61,6 +64,10 @@ Open **Templates → comfyui-apixly** or drag a linked JSON file onto the canvas
 | Start with | What it does | Qualified starting model |
 | --- | --- | --- |
 | [Free creative prompt](example_workflows/creative-prompt.json) | Lighting + viewpoint + camera/lens → final prompt; no Key or model request | No model required |
+| [Expression + Compose V2](example_workflows/expression-prompt-v2.json) | Original 5×5 expression grid + the three existing controls; all Off initially | No model required |
+| [Lossless image grid](example_workflows/image-grid-split.json) | Local image → separate pixel-exact tiles + coordinates → preview | No model required |
+| [AI enhancement instruction](example_workflows/image-enhancement-prompt.json) | Free preservation prompt and model parameters; paid edit starts muted | No model required for preview |
+| [Character sheet plan](example_workflows/character-sheet-plan.json) | Nine templates; select one shot explicitly; no automatic generation | No model required |
 | [Creative → image](example_workflows/creative-image-generation.json) | Free prompt preview → explicitly enabled image generation | `grok-imagine-image` |
 | [Creative → reference edit](example_workflows/creative-reference-edit.json) | Free edit prompt → your local reference → explicitly enabled edit | `gemini-3.1-flash-image` |
 | [Creative → video](example_workflows/creative-video-generation.json) | Free prompt preview → explicitly enabled 3-second text video | `grok-imagine-video` |
@@ -149,7 +156,7 @@ python main.py
 </details>
 
 Restart ComfyUI after installation. Search for **Apixly** in Add Node, or open one
-of the eight templates above. With ComfyUI Desktop or a managed service, set the
+of the twelve templates above. With ComfyUI Desktop or a managed service, set the
 variable in the actual server launcher; another terminal's environment will not
 reach an already-running server. Never put a key in a prompt, node, workflow,
 screenshot or public issue.
@@ -195,6 +202,52 @@ lighting or identical subject preservation. The selected model determines the
 result. They work without a Key, and preview/reset/copy never queue a generation.
 Connect `final_prompt` to a Submit/Edit prompt only when you intend to generate.
 
+## Expression, image tools and character plans
+
+The five new nodes execute without credentials, network requests, a submission
+journal or model calls. Prompt tools start **Off**; the character planner starts
+with **Choose one shot**. Running a free node does not queue a paid node.
+
+- **Expression:** the original Studixly 5×5 grid and parameterized face show
+  energy vertically and affinity horizontally. Warm is left, aloof is right.
+  Target a named person if needed. Center and Off add no prompt fragment.
+- **Compose V2:** combines viewpoint → lighting → expression → lens. It accepts
+  existing angle/lighting/camera outputs plus `APIXLY_EMOTION_V2`. Original V1
+  nodes and contracts stay unchanged; when expression is Off or neutral, V2
+  preserves the V1 final prompt byte for byte. After changing older controls,
+  click **Refresh preview** or execute the free node to confirm the final text.
+- **Grid Split:** Off passes the entire original IMAGE batch through as one
+  output item. On slices RGB/RGBA source pixels without resizing, padding or
+  dropping edges. The IMAGE list is ordered by input batch, row, then column;
+  `coordinates_json` records every tile. Equal splits use floor boundaries;
+  normalized custom cuts use positive half-up pixel rounding. Duplicate or
+  empty cuts and more than 144 total tiles are rejected. The diagram uses cut
+  proportions; execute for actual pixel coordinates. **Downstream nodes run
+  once per list item.** Connect Preview/Save unless you intend multiple paid
+  requests.
+- **AI Enhancement Prompt:** copies the original preservation instruction and
+  offers known model parameter mappings. Connect its exact `model`, `prompt`
+  and `parameters_json`, plus your reference image, to Image Edit. A connected
+  reference supplies actual dimensions; otherwise set width/height. This is
+  **AI redraw enhancement**, which can alter details and text. Its settings do
+  not prove pixel preservation, real super-resolution or guaranteed improvement.
+- **Character Sheet Plan:** nine original templates include key visual,
+  turnaround, head closeups, expressions, poses, costume, color/material,
+  proportions and the Seedance pack. The pack is **three independent front,
+  three-quarter and side shots**. `plan_json` previews the plan; only one
+  explicitly chosen `selected_prompt` and `selected_aspect` are output. The
+  selected shot follows its identity if sheets are reordered; removing it
+  clears selection and requires a new choice. The native `shot_index` also
+  allows deliberate selection (`-1` means none). User text is inserted literally,
+  including dollar signs and template-like braces. There is no hidden batch
+  inference or promise of generated character consistency.
+
+The enhancement starter keeps Image Edit, Image Result and Preview in **Mode:
+Never**, with nonce `0` fixed. Choose a source, review the free output, exact
+model and current price, then explicitly unmute and press Run once for a paid
+edit. Keep the original nonce/task for recovery. The expression, grid and
+character starters contain no paid submission node.
+
 ## Live model pickers
 
 Image and video Submit/Edit nodes provide a picker for the **current selected
@@ -218,6 +271,11 @@ capabilities come from the live service.
 | Apixly Prompt: Lighting | Composes optional lighting and environment instructions | typed lighting, instruction text |
 | Apixly Prompt: Camera & Lens | Composes optional camera/lens/framing instructions | typed camera, instruction text |
 | Apixly Prompt: Compose | Combines your base prompt and enabled tools; never generates | final prompt, controls JSON |
+| Apixly Prompt: Expression | Original 5×5 expression guidance with optional target person | `APIXLY_EMOTION_V2`, instruction text |
+| Apixly Prompt: Compose V2 | Old three controls plus expression; nonbreaking V2 composition | final prompt, versioned controls JSON |
+| Apixly Image: Grid Split | Offline lossless slicing; Off preserves the whole input batch | IMAGE list, coordinates JSON |
+| Apixly Prompt: AI Enhancement | Free preservation instruction and known model parameter mapping | prompt, parameters JSON, aspect ratio, exact model |
+| Apixly Prompt: Character Sheet Plan | Plan JSON plus one deliberately selected shot | plan JSON, selected prompt, selected aspect |
 | Apixly Image: Submit | Starts one asynchronous text-to-image job | `task_id`, `submission_json` |
 | Apixly Image: Edit | Requires reference images and explicitly suggests the qualified Gemini editing model | `task_id`, `submission_json` |
 | Apixly Image: Result | Waits for an existing image task and decodes every result | `IMAGE`, result URL JSON, receipt JSON |

@@ -20,8 +20,8 @@ def test_release_version_matches_api_and_media_user_agents():
     api._json("GET", "/video/config")
     api._media("https://media.example/image.png", max_bytes=100)
     metadata = (Path(__file__).parents[1] / "pyproject.toml").read_text()
-    assert 'version = "0.2.1"' in metadata
+    assert 'version = "0.3.0"' in metadata
     assert [headers["User-Agent"] for headers in calls] == [
-        "comfyui-apixly/0.2.1",
-        "comfyui-apixly/0.2.1",
+        "comfyui-apixly/0.3.0",
+        "comfyui-apixly/0.3.0",
     ]

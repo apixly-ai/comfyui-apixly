@@ -1,0 +1,86 @@
+{
+  "provenance": "Hand-authored regression expectations for a narrow Studixly 381e template bug fix; these are not outputs of the pinned TS oracle. Original golden.json is unchanged.",
+  "rule": "Replace original {character}/{style} template tokens in one pass. Inserted user strings are literal: no dollar replacement metacharacters and no recursive placeholder interpolation.",
+  "cases": [
+    {
+      "input": {
+        "character": "Ada $& explorer",
+        "style": "clay $$ render",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "tag": "key-visual",
+          "prompt": "Full-body character key visual of Ada $& explorer. Style: clay $$ render. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "aspectRatio": "2:3"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "Ada $$ and $` and $'",
+        "style": "paint $& $` $'",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "tag": "key-visual",
+          "prompt": "Full-body character key visual of Ada $$ and $` and $'. Style: paint $& $` $'. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "aspectRatio": "2:3"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "Ada {style}",
+        "style": "clay {character}",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "tag": "key-visual",
+          "prompt": "Full-body character key visual of Ada {style}. Style: clay {character}. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "aspectRatio": "2:3"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "Ada {character} and {style}",
+        "style": "{style} $$ $&",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "tag": "key-visual",
+          "prompt": "Full-body character key visual of Ada {character} and {style}. Style: {style} $$ $&. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "aspectRatio": "2:3"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "﻿$& Ada {style}　",
+        "style": "\t$$ paint",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "tag": "key-visual",
+          "prompt": "Full-body character key visual of $& Ada {style}. Style: $$ paint. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "aspectRatio": "2:3"
+        }
+      ]
+    }
+  ]
+}

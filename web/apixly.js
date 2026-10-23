@@ -4,6 +4,7 @@ import { nativeDownloadURL, safeResultURL } from "./helpers.mjs";
 import { isCreativeNode } from "./creative-helpers.mjs";
 import { attachCreativePanel } from "./creative.mjs";
 import { accountBridge, attachModelPicker, mountAccount } from "./account.mjs";
+import { attachFreeV2Panel } from "./free_tools_v2.mjs";
 
 const LINKS = [
   ["Apixly website", "https://apixly.ai"],
@@ -58,6 +59,7 @@ app.registerExtension({
     node.color = "#152b49";
     node.bgcolor = "#0f172a";
     node.boxcolor = "#2e8fff";
+    if (attachFreeV2Panel(node, app)) return;
     if (isCreativeNode(node)) {
       attachCreativePanel(node, app);
       return;

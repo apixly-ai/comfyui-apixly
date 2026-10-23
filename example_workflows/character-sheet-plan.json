@@ -1,0 +1,89 @@
+{
+  "last_node_id": 2,
+  "last_link_id": 0,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "ApixlyCharacterSheetPlan",
+      "pos": [
+        30,
+        40
+      ],
+      "size": [
+        520,
+        900
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "plan_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "selected_prompt",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "selected_aspect",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyCharacterSheetPlan"
+      },
+      "widgets_values": [
+        false,
+        "A silver-haired explorer in a blue utility jacket.",
+        "cinematic clay",
+        "[\"seedance-pack\"]",
+        "",
+        -1
+      ]
+    },
+    {
+      "id": 2,
+      "type": "Note",
+      "pos": [
+        620,
+        40
+      ],
+      "size": [
+        580,
+        320
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "FREE CHARACTER SHEET PLAN. The nine original Studixly templates produce a JSON shot plan. Seedance reference pack means three independent shots: front, three-quarter, side. Choose exactly one shot in the dropdown and turn On to output its single prompt/aspect. The JSON is a preview, not an automatically mapped prompt list. No Key, model call, guaranteed character consistency, or batch charges. To generate later, deliberately connect selected_prompt to an existing Image Submit/Edit and use model-supported parameters for selected_aspect. Reuse actual reference images for identity guidance. No shot is selected initially. Removing a selected sheet clears its selection; choose another shot explicitly."
+      ]
+    }
+  ],
+  "links": [],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6,
+      "offset": [
+        30,
+        30
+      ]
+    }
+  },
+  "version": 0.4
+}

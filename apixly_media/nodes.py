@@ -24,6 +24,10 @@ from .creative_nodes import (
     ApixlyPromptLighting,
     ApixlyPromptViewpoint,
 )
+from .free_nodes_v2 import (
+    FREE_V2_NODE_CLASS_MAPPINGS,
+    FREE_V2_NODE_DISPLAY_NAME_MAPPINGS,
+)
 from .journal import SubmissionJournal
 
 
@@ -616,3 +620,5 @@ NODE_DISPLAY_NAME_MAPPINGS = {
     "ApixlyPromptCamera": "Apixly Prompt: Camera & Lens",
     "ApixlyPromptCompose": "Apixly Prompt: Compose",
 }
+NODE_CLASS_MAPPINGS.update(FREE_V2_NODE_CLASS_MAPPINGS)
+NODE_DISPLAY_NAME_MAPPINGS.update(FREE_V2_NODE_DISPLAY_NAME_MAPPINGS)

@@ -1,5 +1,5 @@
 <svg xmlns="http://www.w3.org/2000/svg" width="1440" height="640" viewBox="0 0 1440 640" role="img" aria-labelledby="title description">
-<title id="title">Apixly Media for ComfyUI</title><desc id="description">Images, reference edits and videos inside ComfyUI. Ten nodes, eight starter workflows. Illustrated workflow: generate or edit, keep task ID, preview and save.</desc>
+<title id="title">Apixly Media for ComfyUI</title><desc id="description">Images, reference edits and videos inside ComfyUI. Fifteen nodes, twelve starter workflows. Illustrated workflow: generate or edit, keep task ID, preview and save.</desc>
 <defs>
  <linearGradient id="brand" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#00AEEF"/><stop offset=".52" stop-color="#1670f0"/><stop offset="1" stop-color="#635bff"/></linearGradient>
  <linearGradient id="glass" x1="0" y1="0" x2="1" y2="1"><stop stop-color="#d9edff" stop-opacity=".10"/><stop offset=".55" stop-color="#2e8fff" stop-opacity=".055"/><stop offset="1" stop-color="#0c0d12" stop-opacity=".8"/></linearGradient>
@@ -16,7 +16,7 @@
 <text x="74" y="270" font-size="84" font-weight="650" letter-spacing="-3.8" fill="#f8fafc">Images. Edits.</text>
 <text x="74" y="366" font-size="84" font-weight="650" letter-spacing="-3.8" fill="url(#brand)">Videos.</text>
 <text x="78" y="423" font-size="22" fill="#cbd5e1">Your account. Creative controls.</text><text x="78" y="455" font-size="22" fill="#cbd5e1">Images and video in your workflow.</text>
-<rect x="78" y="493" width="156" height="38" rx="19" fill="#0e1118" stroke="#334155"/><circle cx="96" cy="512" r="3" fill="#2e8fff"/><text x="110" y="517" fill="#cbd5e1" font-size="14">10 native nodes</text><rect x="246" y="493" width="184" height="38" rx="19" fill="#0e1118" stroke="#334155"/><circle cx="264" cy="512" r="3" fill="#2e8fff"/><text x="278" y="517" fill="#cbd5e1" font-size="14">8 starter workflows</text>
+<rect x="78" y="493" width="156" height="38" rx="19" fill="#0e1118" stroke="#334155"/><circle cx="96" cy="512" r="3" fill="#2e8fff"/><text x="110" y="517" fill="#cbd5e1" font-size="14">15 native nodes</text><rect x="246" y="493" width="184" height="38" rx="19" fill="#0e1118" stroke="#334155"/><circle cx="264" cy="512" r="3" fill="#2e8fff"/><text x="278" y="517" fill="#cbd5e1" font-size="14">12 starter workflows</text>
 <text x="78" y="584" class="mono" font-size="13" fill="#64748b">YOUR ACCOUNT · YOUR KEY · YOUR CANVAS</text>
 <text x="858" y="123" font-size="11" letter-spacing="2.3" fill="#64748b">ILLUSTRATED WORKFLOW</text>
 <path d="M1087 253V280M1087 376V403" stroke="#2e8fff" stroke-opacity=".8" stroke-width="2" marker-end="url(#arrow)"/>

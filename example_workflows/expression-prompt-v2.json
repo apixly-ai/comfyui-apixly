@@ -1,0 +1,308 @@
+{
+  "last_node_id": 6,
+  "last_link_id": 4,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "ApixlyPromptViewpoint",
+      "pos": [
+        30,
+        40
+      ],
+      "size": [
+        440,
+        760
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "angle",
+          "type": "APIXLY_ANGLE",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptViewpoint"
+      },
+      "widgets_values": [
+        false,
+        "custom",
+        0,
+        0,
+        "none"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "ApixlyPromptLighting",
+      "pos": [
+        520,
+        40
+      ],
+      "size": [
+        440,
+        960
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "lighting",
+          "type": "APIXLY_LIGHTING",
+          "links": [
+            2
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptLighting"
+      },
+      "widgets_values": [
+        false,
+        "none",
+        50,
+        false,
+        "#2e8fff",
+        "perspective",
+        "unspecified",
+        "none",
+        0,
+        0,
+        false,
+        ""
+      ]
+    },
+    {
+      "id": 3,
+      "type": "ApixlyPromptEmotion",
+      "pos": [
+        30,
+        1100
+      ],
+      "size": [
+        440,
+        900
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "emotion",
+          "type": "APIXLY_EMOTION_V2",
+          "links": [
+            3
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptEmotion"
+      },
+      "widgets_values": [
+        false,
+        0,
+        0,
+        ""
+      ]
+    },
+    {
+      "id": 4,
+      "type": "ApixlyPromptCamera",
+      "pos": [
+        520,
+        1100
+      ],
+      "size": [
+        440,
+        640
+      ],
+      "flags": {},
+      "order": 3,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "camera",
+          "type": "APIXLY_CAMERA",
+          "links": [
+            4
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "instruction",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptCamera"
+      },
+      "widgets_values": [
+        false,
+        "none",
+        "none",
+        false,
+        50,
+        "none"
+      ]
+    },
+    {
+      "id": 5,
+      "type": "ApixlyPromptComposeV2",
+      "pos": [
+        1030,
+        40
+      ],
+      "size": [
+        520,
+        580
+      ],
+      "flags": {},
+      "order": 4,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "angle",
+          "type": "APIXLY_ANGLE",
+          "link": 1
+        },
+        {
+          "name": "lighting",
+          "type": "APIXLY_LIGHTING",
+          "link": 2
+        },
+        {
+          "name": "emotion",
+          "type": "APIXLY_EMOTION_V2",
+          "link": 3
+        },
+        {
+          "name": "camera",
+          "type": "APIXLY_CAMERA",
+          "link": 4
+        }
+      ],
+      "outputs": [
+        {
+          "name": "final_prompt",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "controls_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyPromptComposeV2"
+      },
+      "widgets_values": [
+        "Portrait of a person in a quiet studio, natural expression.",
+        "generate"
+      ]
+    },
+    {
+      "id": 6,
+      "type": "Note",
+      "pos": [
+        1030,
+        690
+      ],
+      "size": [
+        520,
+        280
+      ],
+      "flags": {},
+      "order": 5,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "FREE V2 EXPRESSION WORKFLOW. All four tools start Off. The original 5 by 5 expression grid uses high energy above, calm below, warm on the left and aloof on the right. Choose a cell, optionally name a target person, then enable Expression. Old controls use the unchanged typed sockets. After changing older controls, click Refresh preview or execute this free Compose V2 node. Center or Off adds no expression. No Key, model call or automatic generation. Connect final_prompt to a paid node only deliberately."
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      5,
+      0,
+      "APIXLY_ANGLE"
+    ],
+    [
+      2,
+      2,
+      0,
+      5,
+      1,
+      "APIXLY_LIGHTING"
+    ],
+    [
+      3,
+      3,
+      0,
+      5,
+      2,
+      "APIXLY_EMOTION_V2"
+    ],
+    [
+      4,
+      4,
+      0,
+      5,
+      3,
+      "APIXLY_CAMERA"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.6,
+      "offset": [
+        30,
+        30
+      ]
+    }
+  },
+  "version": 0.4
+}

@@ -15,9 +15,19 @@ provider needed for the exact selected model. Review the service's current terms
 and privacy policy before sending confidential, personal or third-party material.
 Paid generation requires access to that model and sufficient API balance.
 
-The Viewpoint, Lighting, Camera & Lens and Compose Prompt utilities run locally.
-Their diagrams, presets and final-prompt preview make no inference request and do
-not need credentials. Composing them does not queue a generation. Opening a model
+The nine free utilities—Viewpoint, Lighting, Camera & Lens, Compose, Expression,
+Compose V2, Grid Split, AI Enhancement Prompt and Character Sheet Plan—run locally.
+They do not read account credentials, create a media client or submission journal,
+send network/model requests, or queue generation. Their inputs and previews may
+be saved in your ComfyUI workflow. Character selection identity is saved in its
+node properties; it contains the sheet/shot identity, index and sheet selection,
+not account data. Character plans output a single explicitly selected prompt,
+never a prompt list that automatically starts a paid batch. Grid Split intentionally
+outputs an IMAGE list when enabled; downstream nodes execute per item, so connecting
+a paid node can cause multiple billed requests. Off passes the original IMAGE
+batch as one output item. The enhancement utility only produces instructions
+and parameters; connecting and explicitly running Image Edit is a separate paid
+action that may redraw details. Opening a model
 picker makes bounded catalog/account metadata reads; its options use a ten-minute
 identity-scoped cache with stale refresh and a manual Refresh action. Catalog,
 Key selection and connection approval do not generate media.

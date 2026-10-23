@@ -1,0 +1,2079 @@
+{
+  "source_sha": "381eaaa437870b43e2a791b14d8bad52dcb5caef",
+  "source_hashes": {
+    "lib/canvas/tools/emotion.ts": "b74d7215a7bad0469a4b281f35cfa7862267e5774f95ac071891338de12c601c",
+    "components/media/spatial/face-math.ts": "e6679f291cfa465ff9073094b6b431f74b4cbc22385674d314c36e8db585850f",
+    "lib/canvas/character-sheets.ts": "12f545d47366d585d7e38c3e0d9ff7b26801ed3b5ad8c9f53e5a3e7233ddb652",
+    "components/infinity-canvas/vendor/lib/media-size.ts": "e793b292e694cda6424d23875180e92f61457341eb0a8f7076df7d9b797142b1",
+    "lib/ai/media-params.ts": "568a52a948cb836571fccd7883c6208b49c17d33ec81aa8ff783459997888998",
+    "components/infinity-canvas/image-enhancement.ts": "5147f092bcb94d4dcdb018262a7b940c724d301dec782df676f954dad3310ace"
+  },
+  "emotion": [
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -2,
+        "targetLabel": ""
+      },
+      "expected": "melancholic, downturned mouth, drooping eyelids, deeply calm, still expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with melancholic, downturned mouth, drooping eyelids, deeply calm, still expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with melancholic, downturned mouth, drooping eyelids, deeply calm, still expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -2,
+        "affinity": -2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -1,
+        "targetLabel": ""
+      },
+      "expected": "gloomy, faint frown, deeply calm, still expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with gloomy, faint frown, deeply calm, still expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": -1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with gloomy, faint frown, deeply calm, still expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -2,
+        "affinity": -1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 0,
+        "targetLabel": ""
+      },
+      "expected": "deeply calm, still expression"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 0,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with deeply calm, still expression"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 0,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with deeply calm, still expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -2,
+        "affinity": 0,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 1,
+        "targetLabel": ""
+      },
+      "expected": "serene expression, at ease, deeply calm, still expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with serene expression, at ease, deeply calm, still expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with serene expression, at ease, deeply calm, still expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -2,
+        "affinity": 1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 2,
+        "targetLabel": ""
+      },
+      "expected": "peaceful, serene expression, deeply calm, still expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with peaceful, serene expression, deeply calm, still expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": -2,
+        "affinity": 2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with peaceful, serene expression, deeply calm, still expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -2,
+        "affinity": 2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -2,
+        "targetLabel": ""
+      },
+      "expected": "gloomy, faint frown, relaxed, composed expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with gloomy, faint frown, relaxed, composed expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with gloomy, faint frown, relaxed, composed expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -1,
+        "affinity": -2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -1,
+        "targetLabel": ""
+      },
+      "expected": "bored, indifferent, relaxed, composed expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with bored, indifferent, relaxed, composed expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": -1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with bored, indifferent, relaxed, composed expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -1,
+        "affinity": -1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 0,
+        "targetLabel": ""
+      },
+      "expected": "relaxed, composed expression"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 0,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with relaxed, composed expression"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 0,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with relaxed, composed expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -1,
+        "affinity": 0,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 1,
+        "targetLabel": ""
+      },
+      "expected": "content, relaxed, composed expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with content, relaxed, composed expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with content, relaxed, composed expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -1,
+        "affinity": 1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 2,
+        "targetLabel": ""
+      },
+      "expected": "serene expression, at ease, relaxed, composed expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with serene expression, at ease, relaxed, composed expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": -1,
+        "affinity": 2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with serene expression, at ease, relaxed, composed expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": -1,
+        "affinity": 2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -2,
+        "targetLabel": ""
+      },
+      "expected": "cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 0,
+        "affinity": -2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -1,
+        "targetLabel": ""
+      },
+      "expected": "reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": -1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 0,
+        "affinity": -1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 0,
+        "targetLabel": ""
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 0,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 0,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 0,
+        "affinity": 0,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 1,
+        "targetLabel": ""
+      },
+      "expected": "gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 0,
+        "affinity": 1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 2,
+        "targetLabel": ""
+      },
+      "expected": "warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 0,
+        "affinity": 2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 0,
+        "affinity": 2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -2,
+        "targetLabel": ""
+      },
+      "expected": "angry, furrowed brow, alert, animated expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with angry, furrowed brow, alert, animated expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with angry, furrowed brow, alert, animated expression, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 1,
+        "affinity": -2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -1,
+        "targetLabel": ""
+      },
+      "expected": "annoyed, raised eyebrow, alert, animated expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with annoyed, raised eyebrow, alert, animated expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": -1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with annoyed, raised eyebrow, alert, animated expression, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 1,
+        "affinity": -1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 0,
+        "targetLabel": ""
+      },
+      "expected": "alert, animated expression"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 0,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with alert, animated expression"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 0,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with alert, animated expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 1,
+        "affinity": 0,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 1,
+        "targetLabel": ""
+      },
+      "expected": "cheerful, alert, animated expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with cheerful, alert, animated expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with cheerful, alert, animated expression, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 1,
+        "affinity": 1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 2,
+        "targetLabel": ""
+      },
+      "expected": "joyful, excited, alert, animated expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with joyful, excited, alert, animated expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 1,
+        "affinity": 2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with joyful, excited, alert, animated expression, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 1,
+        "affinity": 2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -2,
+        "targetLabel": ""
+      },
+      "expected": "furious, scowl, furrowed brow, clenched teeth, intense, high-energy expression, wide eyes, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with furious, scowl, furrowed brow, clenched teeth, intense, high-energy expression, wide eyes, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with furious, scowl, furrowed brow, clenched teeth, intense, high-energy expression, wide eyes, cold distant gaze, detached expression"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 2,
+        "affinity": -2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -1,
+        "targetLabel": ""
+      },
+      "expected": "angry, furrowed brow, intense, high-energy expression, wide eyes, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with angry, furrowed brow, intense, high-energy expression, wide eyes, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": -1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with angry, furrowed brow, intense, high-energy expression, wide eyes, reserved, aloof expression, averted gaze"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 2,
+        "affinity": -1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 0,
+        "targetLabel": ""
+      },
+      "expected": "intense, high-energy expression, wide eyes"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 0,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with intense, high-energy expression, wide eyes"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 0,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with intense, high-energy expression, wide eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 2,
+        "affinity": 0,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 1,
+        "targetLabel": ""
+      },
+      "expected": "joyful, excited, intense, high-energy expression, wide eyes, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 1,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with joyful, excited, intense, high-energy expression, wide eyes, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 1,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with joyful, excited, intense, high-energy expression, wide eyes, gentle smile, soft eyes"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 2,
+        "affinity": 1,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 2,
+        "targetLabel": ""
+      },
+      "expected": "elated, beaming smile, intense, high-energy expression, wide eyes, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 2,
+        "targetLabel": "  the woman on the left  "
+      },
+      "expected": "the woman on the left with elated, beaming smile, intense, high-energy expression, wide eyes, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "arousal": 2,
+        "affinity": 2,
+        "targetLabel": "﻿角色🌠　"
+      },
+      "expected": "角色🌠 with elated, beaming smile, intense, high-energy expression, wide eyes, warm beaming smile, smiling eyes, open and approachable"
+    },
+    {
+      "input": {
+        "enabled": false,
+        "arousal": 2,
+        "affinity": 2,
+        "targetLabel": "retained"
+      },
+      "expected": ""
+    },
+    {
+      "input": {},
+      "expected": ""
+    }
+  ],
+  "character": [
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "key-visual"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Full-body character key visual of Astronaut Ada. Style: cinematic clay. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "tag": "key-visual"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "turnaround"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "16:9",
+          "prompt": "Character turnaround model sheet of Astronaut Ada. Style: cinematic clay. The SAME character shown in four orthographic views arranged left to right: front view, left side profile, right side profile, and back view. Consistent proportions, costume and colors across all four views, neutral A-pose, flat even lighting, plain light grey background, professional character design reference sheet.",
+          "tag": "turnaround"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "head-closeups"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "16:9",
+          "prompt": "Character head study of Astronaut Ada. Style: cinematic clay. The same head shown from three angles side by side: front, side profile, and three-quarter view. Consistent facial features and hairstyle, neutral expression, clean plain background, character design reference.",
+          "tag": "head-closeups"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "expressions"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "4:3",
+          "prompt": "Expression sheet of Astronaut Ada. Style: cinematic clay. A neat grid of the same character's face showing distinct emotions: neutral, happy, angry, sad, surprised, and smirking. Consistent character design and features across every panel, clean plain background, model sheet.",
+          "tag": "expressions"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "poses"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "16:9",
+          "prompt": "Character pose sheet of Astronaut Ada. Style: cinematic clay. The same character in several dynamic full-body action poses, anatomically correct, feet grounded, consistent proportions, costume and colors, plain background, character design reference.",
+          "tag": "poses"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "costume"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "4:3",
+          "prompt": "Costume and accessory breakdown sheet of Astronaut Ada. Style: cinematic clay. A central full-body view with separate close-up callouts of clothing details, accessories and props arranged around it, each clearly separated, consistent design, clean background, character reference sheet.",
+          "tag": "costume"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "color-material"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "4:3",
+          "prompt": "Color and material board for Astronaut Ada. Style: cinematic clay. A palette of color swatch chips next to material texture close-ups (fabric, metal, skin, hair) beside a small character thumbnail for reference, clean organized layout, design board.",
+          "tag": "color-material"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "proportions"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "16:9",
+          "prompt": "Character proportion sheet of Astronaut Ada. Style: cinematic clay. The same full-body character aligned to a heads-tall measurement grid with horizontal guide lines marking head units, front view, neutral pose, plain background, character design reference.",
+          "tag": "proportions"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "  Astronaut Ada  ",
+        "style": " cinematic clay ",
+        "sheetIds": [
+          "seedance-pack"
+        ]
+      },
+      "expected": [
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of Astronaut Ada. Style: cinematic clay. Front view, full body, neutral standing pose, plain seamless background, even lighting, sharp focus, consistent character.",
+          "tag": "seedance-pack"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of the SAME character Astronaut Ada. Style: cinematic clay. Three-quarter view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference.",
+          "tag": "seedance-pack"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of the SAME character Astronaut Ada. Style: cinematic clay. Side profile view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference.",
+          "tag": "seedance-pack"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "",
+        "style": "",
+        "sheetIds": [
+          "unknown",
+          "seedance-pack",
+          "turnaround"
+        ],
+        "custom": "  new outfit  "
+      },
+      "expected": [
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of a character. Style: detailed, high quality. Front view, full body, neutral standing pose, plain seamless background, even lighting, sharp focus, consistent character.",
+          "tag": "seedance-pack"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of the SAME character a character. Style: detailed, high quality. Three-quarter view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference.",
+          "tag": "seedance-pack"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Clean reference photo of the SAME character a character. Style: detailed, high quality. Side profile view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference.",
+          "tag": "seedance-pack"
+        },
+        {
+          "aspectRatio": "16:9",
+          "prompt": "Character turnaround model sheet of a character. Style: detailed, high quality. The SAME character shown in four orthographic views arranged left to right: front view, left side profile, right side profile, and back view. Consistent proportions, costume and colors across all four views, neutral A-pose, flat even lighting, plain light grey background, professional character design reference sheet.",
+          "tag": "turnaround"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "a character. new outfit. Style: detailed, high quality. Full body, clean plain background, consistent character, high detail.",
+          "tag": "custom"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "﻿角色🌠　",
+        "style": "\t",
+        "sheetIds": [
+          "expressions",
+          "key-visual",
+          "expressions"
+        ],
+        "custom": ""
+      },
+      "expected": [
+        {
+          "aspectRatio": "4:3",
+          "prompt": "Expression sheet of 角色🌠. Style: detailed, high quality. A neat grid of the same character's face showing distinct emotions: neutral, happy, angry, sad, surprised, and smirking. Consistent character design and features across every panel, clean plain background, model sheet.",
+          "tag": "expressions"
+        },
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Full-body character key visual of 角色🌠. Style: detailed, high quality. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail.",
+          "tag": "key-visual"
+        },
+        {
+          "aspectRatio": "4:3",
+          "prompt": "Expression sheet of 角色🌠. Style: detailed, high quality. A neat grid of the same character's face showing distinct emotions: neutral, happy, angry, sad, surprised, and smirking. Consistent character design and features across every panel, clean plain background, model sheet.",
+          "tag": "expressions"
+        }
+      ]
+    },
+    {
+      "input": {
+        "character": "Ada",
+        "style": "",
+        "sheetIds": [],
+        "custom": "  custom study  "
+      },
+      "expected": [
+        {
+          "aspectRatio": "2:3",
+          "prompt": "Ada. custom study. Style: detailed, high quality. Full body, clean plain background, consistent character, high detail.",
+          "tag": "custom"
+        }
+      ]
+    }
+  ],
+  "enhancement": [
+    {
+      "input": {
+        "model": "grok-imagine-image",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "aspect_ratio": "1:1"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "aspect_ratio": "3:2"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "aspect_ratio": "4:3"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "aspect_ratio": "1:1"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image-quality",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "aspect_ratio": "1:1"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image-quality",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "aspect_ratio": "3:2"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image-quality",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "aspect_ratio": "4:3"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "grok-imagine-image-quality",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "aspect_ratio": "1:1"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3.1-flash-image-preview",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3.1-flash-image-preview",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "aspect_ratio": "3:2",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3.1-flash-image-preview",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "aspect_ratio": "4:3",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3.1-flash-image-preview",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3-pro-image-preview",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3-pro-image-preview",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "aspect_ratio": "3:2",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3-pro-image-preview",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "aspect_ratio": "4:3",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-3-pro-image-preview",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-nano-banana-2.1",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-nano-banana-2.1",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "aspect_ratio": "3:2",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-nano-banana-2.1",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "aspect_ratio": "4:3",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gemini-nano-banana-2.1",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "aspect_ratio": "1:1",
+          "resolution": "1K"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1536x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1344x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-flare",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-flare",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1536x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-flare",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1344x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-flare",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-sunburst",
+        "width": 1024,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "1:1",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-sunburst",
+        "width": 1536,
+        "height": 1024
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "3:2",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1536x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-sunburst",
+        "width": 1001,
+        "height": 777
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "4:3",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1344x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    },
+    {
+      "input": {
+        "model": "gpt-image-2.5-sunburst",
+        "width": 900,
+        "height": 2100
+      },
+      "expected": {
+        "prompt": "Improve the visual clarity of this image: reduce compression artifacts and noise, recover natural fine detail, and keep edges clean without halos. Preserve the original composition, identity, text, colors, lighting and objects. Do not add or remove elements or change the artistic style.",
+        "aspect": "9:21",
+        "parameters": {
+          "moderation": "low",
+          "output_format": "png",
+          "quality": "auto",
+          "size": "1024x1024"
+        },
+        "count": 1,
+        "tools": {}
+      }
+    }
+  ],
+  "face": [
+    {
+      "input": [
+        -2,
+        -2
+      ],
+      "expected": {
+        "mouthCurve": -1,
+        "mouthOpen": 0,
+        "eyeOpen": 0.15,
+        "browRaise": -1,
+        "browAngle": -1
+      }
+    },
+    {
+      "input": [
+        -2,
+        -1
+      ],
+      "expected": {
+        "mouthCurve": -0.575,
+        "mouthOpen": 0,
+        "eyeOpen": 0.15,
+        "browRaise": -1,
+        "browAngle": -0.5
+      }
+    },
+    {
+      "input": [
+        -2,
+        0
+      ],
+      "expected": {
+        "mouthCurve": -0.15,
+        "mouthOpen": 0,
+        "eyeOpen": 0.15,
+        "browRaise": -1,
+        "browAngle": 0
+      }
+    },
+    {
+      "input": [
+        -2,
+        1
+      ],
+      "expected": {
+        "mouthCurve": 0.275,
+        "mouthOpen": 0,
+        "eyeOpen": 0.15,
+        "browRaise": -1,
+        "browAngle": 0.5
+      }
+    },
+    {
+      "input": [
+        -2,
+        2
+      ],
+      "expected": {
+        "mouthCurve": 0.7,
+        "mouthOpen": 0,
+        "eyeOpen": 0.15,
+        "browRaise": -1,
+        "browAngle": 1
+      }
+    },
+    {
+      "input": [
+        -1,
+        -2
+      ],
+      "expected": {
+        "mouthCurve": -0.9249999999999999,
+        "mouthOpen": 0,
+        "eyeOpen": 0.32500000000000007,
+        "browRaise": -0.5,
+        "browAngle": -1
+      }
+    },
+    {
+      "input": [
+        -1,
+        -1
+      ],
+      "expected": {
+        "mouthCurve": -0.5,
+        "mouthOpen": 0,
+        "eyeOpen": 0.32500000000000007,
+        "browRaise": -0.5,
+        "browAngle": -0.5
+      }
+    },
+    {
+      "input": [
+        -1,
+        0
+      ],
+      "expected": {
+        "mouthCurve": -0.075,
+        "mouthOpen": 0,
+        "eyeOpen": 0.32500000000000007,
+        "browRaise": -0.5,
+        "browAngle": 0
+      }
+    },
+    {
+      "input": [
+        -1,
+        1
+      ],
+      "expected": {
+        "mouthCurve": 0.35,
+        "mouthOpen": 0,
+        "eyeOpen": 0.32500000000000007,
+        "browRaise": -0.5,
+        "browAngle": 0.5
+      }
+    },
+    {
+      "input": [
+        -1,
+        2
+      ],
+      "expected": {
+        "mouthCurve": 0.775,
+        "mouthOpen": 0,
+        "eyeOpen": 0.32500000000000007,
+        "browRaise": -0.5,
+        "browAngle": 1
+      }
+    },
+    {
+      "input": [
+        0,
+        -2
+      ],
+      "expected": {
+        "mouthCurve": -0.85,
+        "mouthOpen": 0,
+        "eyeOpen": 0.55,
+        "browRaise": 0,
+        "browAngle": -1
+      }
+    },
+    {
+      "input": [
+        0,
+        -1
+      ],
+      "expected": {
+        "mouthCurve": -0.425,
+        "mouthOpen": 0,
+        "eyeOpen": 0.55,
+        "browRaise": 0,
+        "browAngle": -0.5
+      }
+    },
+    {
+      "input": [
+        0,
+        0
+      ],
+      "expected": {
+        "mouthCurve": 0,
+        "mouthOpen": 0,
+        "eyeOpen": 0.55,
+        "browRaise": 0,
+        "browAngle": 0
+      }
+    },
+    {
+      "input": [
+        0,
+        1
+      ],
+      "expected": {
+        "mouthCurve": 0.425,
+        "mouthOpen": 0,
+        "eyeOpen": 0.55,
+        "browRaise": 0,
+        "browAngle": 0.5
+      }
+    },
+    {
+      "input": [
+        0,
+        2
+      ],
+      "expected": {
+        "mouthCurve": 0.85,
+        "mouthOpen": 0,
+        "eyeOpen": 0.55,
+        "browRaise": 0,
+        "browAngle": 1
+      }
+    },
+    {
+      "input": [
+        1,
+        -2
+      ],
+      "expected": {
+        "mouthCurve": -0.775,
+        "mouthOpen": 0.5,
+        "eyeOpen": 0.775,
+        "browRaise": 0.5,
+        "browAngle": -1
+      }
+    },
+    {
+      "input": [
+        1,
+        -1
+      ],
+      "expected": {
+        "mouthCurve": -0.35,
+        "mouthOpen": 0.5,
+        "eyeOpen": 0.775,
+        "browRaise": 0.5,
+        "browAngle": -0.5
+      }
+    },
+    {
+      "input": [
+        1,
+        0
+      ],
+      "expected": {
+        "mouthCurve": 0.075,
+        "mouthOpen": 0.5,
+        "eyeOpen": 0.775,
+        "browRaise": 0.5,
+        "browAngle": 0
+      }
+    },
+    {
+      "input": [
+        1,
+        1
+      ],
+      "expected": {
+        "mouthCurve": 0.5,
+        "mouthOpen": 0.5,
+        "eyeOpen": 0.775,
+        "browRaise": 0.5,
+        "browAngle": 0.5
+      }
+    },
+    {
+      "input": [
+        1,
+        2
+      ],
+      "expected": {
+        "mouthCurve": 0.9249999999999999,
+        "mouthOpen": 0.5,
+        "eyeOpen": 0.775,
+        "browRaise": 0.5,
+        "browAngle": 1
+      }
+    },
+    {
+      "input": [
+        2,
+        -2
+      ],
+      "expected": {
+        "mouthCurve": -0.7,
+        "mouthOpen": 1,
+        "eyeOpen": 1,
+        "browRaise": 1,
+        "browAngle": -1
+      }
+    },
+    {
+      "input": [
+        2,
+        -1
+      ],
+      "expected": {
+        "mouthCurve": -0.275,
+        "mouthOpen": 1,
+        "eyeOpen": 1,
+        "browRaise": 1,
+        "browAngle": -0.5
+      }
+    },
+    {
+      "input": [
+        2,
+        0
+      ],
+      "expected": {
+        "mouthCurve": 0.15,
+        "mouthOpen": 1,
+        "eyeOpen": 1,
+        "browRaise": 1,
+        "browAngle": 0
+      }
+    },
+    {
+      "input": [
+        2,
+        1
+      ],
+      "expected": {
+        "mouthCurve": 0.575,
+        "mouthOpen": 1,
+        "eyeOpen": 1,
+        "browRaise": 1,
+        "browAngle": 0.5
+      }
+    },
+    {
+      "input": [
+        2,
+        2
+      ],
+      "expected": {
+        "mouthCurve": 1,
+        "mouthOpen": 1,
+        "eyeOpen": 1,
+        "browRaise": 1,
+        "browAngle": 1
+      }
+    }
+  ],
+  "character_sheets": [
+    {
+      "id": "key-visual",
+      "labelKey": "csheetKeyVisual",
+      "hintKey": "csheetKeyVisualHint",
+      "shots": [
+        {
+          "aspectRatio": "2:3",
+          "promptTemplate": "Full-body character key visual of {character}. Style: {style}. Standing in a relaxed confident pose, front view, full figure from head to toe, detailed rendering, clean plain studio background, soft even lighting, high detail."
+        }
+      ]
+    },
+    {
+      "id": "turnaround",
+      "labelKey": "csheetTurnaround",
+      "hintKey": "csheetTurnaroundHint",
+      "shots": [
+        {
+          "aspectRatio": "16:9",
+          "promptTemplate": "Character turnaround model sheet of {character}. Style: {style}. The SAME character shown in four orthographic views arranged left to right: front view, left side profile, right side profile, and back view. Consistent proportions, costume and colors across all four views, neutral A-pose, flat even lighting, plain light grey background, professional character design reference sheet."
+        }
+      ]
+    },
+    {
+      "id": "head-closeups",
+      "labelKey": "csheetHeadCloseups",
+      "hintKey": "csheetHeadCloseupsHint",
+      "shots": [
+        {
+          "aspectRatio": "16:9",
+          "promptTemplate": "Character head study of {character}. Style: {style}. The same head shown from three angles side by side: front, side profile, and three-quarter view. Consistent facial features and hairstyle, neutral expression, clean plain background, character design reference."
+        }
+      ]
+    },
+    {
+      "id": "expressions",
+      "labelKey": "csheetExpressions",
+      "hintKey": "csheetExpressionsHint",
+      "shots": [
+        {
+          "aspectRatio": "4:3",
+          "promptTemplate": "Expression sheet of {character}. Style: {style}. A neat grid of the same character's face showing distinct emotions: neutral, happy, angry, sad, surprised, and smirking. Consistent character design and features across every panel, clean plain background, model sheet."
+        }
+      ]
+    },
+    {
+      "id": "poses",
+      "labelKey": "csheetPoses",
+      "hintKey": "csheetPosesHint",
+      "shots": [
+        {
+          "aspectRatio": "16:9",
+          "promptTemplate": "Character pose sheet of {character}. Style: {style}. The same character in several dynamic full-body action poses, anatomically correct, feet grounded, consistent proportions, costume and colors, plain background, character design reference."
+        }
+      ]
+    },
+    {
+      "id": "costume",
+      "labelKey": "csheetCostume",
+      "hintKey": "csheetCostumeHint",
+      "shots": [
+        {
+          "aspectRatio": "4:3",
+          "promptTemplate": "Costume and accessory breakdown sheet of {character}. Style: {style}. A central full-body view with separate close-up callouts of clothing details, accessories and props arranged around it, each clearly separated, consistent design, clean background, character reference sheet."
+        }
+      ]
+    },
+    {
+      "id": "color-material",
+      "labelKey": "csheetColorMaterial",
+      "hintKey": "csheetColorMaterialHint",
+      "shots": [
+        {
+          "aspectRatio": "4:3",
+          "promptTemplate": "Color and material board for {character}. Style: {style}. A palette of color swatch chips next to material texture close-ups (fabric, metal, skin, hair) beside a small character thumbnail for reference, clean organized layout, design board."
+        }
+      ]
+    },
+    {
+      "id": "proportions",
+      "labelKey": "csheetProportions",
+      "hintKey": "csheetProportionsHint",
+      "shots": [
+        {
+          "aspectRatio": "16:9",
+          "promptTemplate": "Character proportion sheet of {character}. Style: {style}. The same full-body character aligned to a heads-tall measurement grid with horizontal guide lines marking head units, front view, neutral pose, plain background, character design reference."
+        }
+      ]
+    },
+    {
+      "id": "seedance-pack",
+      "labelKey": "csheetSeedancePack",
+      "hintKey": "csheetSeedancePackHint",
+      "shots": [
+        {
+          "aspectRatio": "2:3",
+          "promptTemplate": "Clean reference photo of {character}. Style: {style}. Front view, full body, neutral standing pose, plain seamless background, even lighting, sharp focus, consistent character."
+        },
+        {
+          "aspectRatio": "2:3",
+          "promptTemplate": "Clean reference photo of the SAME character {character}. Style: {style}. Three-quarter view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference."
+        },
+        {
+          "aspectRatio": "2:3",
+          "promptTemplate": "Clean reference photo of the SAME character {character}. Style: {style}. Side profile view, full body, neutral standing pose, plain seamless background, even lighting, consistent with the front-view reference."
+        }
+      ]
+    }
+  ]
+}
