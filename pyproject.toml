@@ -4,7 +4,7 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comfyui-apixly"
-version = "0.1.0"
+version = "0.1.1"
 description = "Create images and videos with apixly.ai. Resume tasks in ComfyUI; get API keys, models and usage at platform.apixly.ai."
 readme = "README.md"
 requires-python = ">=3.10"
@@ -30,7 +30,6 @@ packages = ["apixly_media"]
 PublisherId = "apixly"
 DisplayName = "Apixly Media"
 Icon = "https://raw.githubusercontent.com/apixly-ai/comfyui-apixly/HEAD/assets/icon.png"
-includes = ["apixly_media", "example_workflows", "assets", "web"]
 
 [tool.pytest.ini_options]
 pythonpath = ["."]
