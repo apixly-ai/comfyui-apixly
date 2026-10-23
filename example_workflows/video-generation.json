@@ -1,0 +1,146 @@
+{
+  "last_node_id": 3,
+  "last_link_id": 1,
+  "nodes": [
+    {
+      "id": 1,
+      "type": "ApixlyVideoSubmit",
+      "pos": [
+        20,
+        30
+      ],
+      "size": [
+        380,
+        260
+      ],
+      "flags": {},
+      "order": 0,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "links": [
+            1
+          ],
+          "slot_index": 0
+        },
+        {
+          "name": "submission_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyVideoSubmit"
+      },
+      "widgets_values": [
+        "grok-imagine-video",
+        "A locked-off cinematic shot of a blue glass vase on a neutral studio table.",
+        "{}",
+        0,
+        "fixed",
+        3,
+        "720p",
+        "16:9"
+      ]
+    },
+    {
+      "id": 2,
+      "type": "ApixlyVideoResult",
+      "pos": [
+        460,
+        30
+      ],
+      "size": [
+        380,
+        260
+      ],
+      "flags": {},
+      "order": 1,
+      "mode": 0,
+      "inputs": [
+        {
+          "name": "task_id",
+          "type": "STRING",
+          "link": 1
+        }
+      ],
+      "outputs": [
+        {
+          "name": "video_path",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 0
+        },
+        {
+          "name": "result_url",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 1
+        },
+        {
+          "name": "receipt_json",
+          "type": "STRING",
+          "links": [],
+          "slot_index": 2
+        }
+      ],
+      "properties": {
+        "Node name for S&R": "ApixlyVideoResult"
+      },
+      "widgets_values": [
+        900,
+        3.0,
+        true
+      ]
+    },
+    {
+      "id": 3,
+      "type": "Note",
+      "pos": [
+        20,
+        390
+      ],
+      "size": [
+        820,
+        180
+      ],
+      "flags": {},
+      "order": 2,
+      "mode": 0,
+      "inputs": [],
+      "outputs": [],
+      "properties": {
+        "Node name for S&R": "Note"
+      },
+      "widgets_values": [
+        "Set an exact video model and confirm it supports the requested duration, resolution and aspect ratio. This starts a paid action. Video Result downloads to output/apixly and returns a local path plus temporary URL, not a native VIDEO object. On timeout recover the existing task ID; do not create another submission to retry a download."
+      ]
+    }
+  ],
+  "links": [
+    [
+      1,
+      1,
+      0,
+      2,
+      0,
+      "STRING"
+    ]
+  ],
+  "groups": [],
+  "config": {},
+  "extra": {
+    "ds": {
+      "scale": 0.85,
+      "offset": [
+        50,
+        50
+      ]
+    }
+  },
+  "version": 0.4
+}

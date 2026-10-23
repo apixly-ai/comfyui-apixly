@@ -1,0 +1,8 @@
+tests/
+build/
+dist/
+*.egg-info/
+.pytest_cache/
+**/__pycache__/
+.env*
+*.sqlite3*
