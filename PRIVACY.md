@@ -13,6 +13,9 @@ when a node runs. It is never offered as a node widget or output and is not stor
 in the submission journal. The plugin has no analytics, advertising, telemetry,
 remote executable-code loading, or background generation. Standard HTTP requests
 include a plugin/version User-Agent. Importing the plugin makes no network call.
+Public reference images are fetched without the API key for content validation
+and duplicate-submission hashing; their original URLs are then passed to Apixly.
+The plugin does not silently host local video-reference images on another service.
 
 The plugin authenticates only against the fixed Apixly API origin. API calls do
 not follow redirects. Signed public result URLs are fetched without an

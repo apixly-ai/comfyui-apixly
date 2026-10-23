@@ -10,7 +10,14 @@ import os
 import uuid
 from pathlib import Path
 
-from .client import ApixlyClient, ApixlyError, checked_parameters, public_receipt
+from .client import (
+    MAX_IMAGE_BYTES,
+    ApixlyClient,
+    ApixlyError,
+    checked_parameters,
+    public_receipt,
+    safe_media_url,
+)
 from .journal import SubmissionJournal
 
 
@@ -20,6 +27,26 @@ def parse_parameters(text):
     except (ValueError, TypeError):
         raise ValueError("Parameters must be a valid JSON object.") from None
     return checked_parameters(value)
+
+
+def parse_reference_urls(value):
+    if not value:
+        return []
+    if not isinstance(value, str):
+        raise ValueError("Reference image URLs must be HTTPS text or a JSON array.")
+    try:
+        urls = (
+            json.loads(value) if value.lstrip().startswith("[") else value.splitlines()
+        )
+        if not isinstance(urls, list) or not 1 <= len(urls) <= 16:
+            raise ValueError("Provide 1–16 public HTTPS reference image URLs.")
+        if any(not isinstance(url, str) or not url.strip() for url in urls):
+            raise ValueError("Every reference must be a nonempty public HTTPS URL.")
+        return [safe_media_url(url.strip()) for url in urls]
+    except (ValueError, TypeError, ApixlyError):
+        raise ValueError(
+            "References require public HTTPS image URLs. Connect Image: Result result_urls_json to reference_image_urls; local data URLs are not accepted here."
+        ) from None
 
 
 def encode_images(images):
@@ -335,7 +362,20 @@ class ApixlyVideoSubmit:
             ["16:9", "9:16", "1:1", "21:9", "3:4", "4:3", "adaptive"],
             {"default": "16:9"},
         )
-        return {"required": inputs, "optional": {"reference_images": ("IMAGE",)}}
+        return {
+            "required": inputs,
+            "optional": {
+                "reference_images": ("IMAGE",),
+                "reference_image_urls": (
+                    "STRING",
+                    {
+                        "multiline": True,
+                        "default": "",
+                        "tooltip": "Public HTTPS image URLs, as a JSON array or one per line. Connect Image: Result result_urls_json. Grok image-to-video requires URLs rather than local IMAGE data.",
+                    },
+                ),
+            },
+        }
 
     def submit(
         self,
@@ -347,7 +387,17 @@ class ApixlyVideoSubmit:
         seconds=None,
         resolution=None,
         aspect_ratio=None,
+        reference_image_urls="",
     ):
+        urls = parse_reference_urls(reference_image_urls)
+        if reference_images is not None and urls:
+            raise ValueError(
+                "Choose one reference source: local IMAGE or reference_image_urls, not both."
+            )
+        if reference_images is not None and model == "grok-imagine-video-1.5-preview":
+            raise ValueError(
+                "grok-imagine-video-1.5-preview requires public HTTPS references. Connect Image: Result result_urls_json to reference_image_urls; no upload or generation was submitted."
+            )
         parameters = parse_parameters(parameters_json)
         for name, value in {
             "seconds": seconds,
@@ -362,7 +412,7 @@ class ApixlyVideoSubmit:
                 parameters[name] = value
         api = ApixlyClient.from_environment()
         images = encode_images(reference_images)
-        if images:
+        if images or urls:
             capabilities = api._json("GET", "/video/config")
             for capability in capabilities.get("data", []):
                 if not isinstance(capability, dict) or capability.get("model") != model:
@@ -377,8 +427,31 @@ class ApixlyVideoSubmit:
             "data:image/png;base64," + base64.b64encode(image).decode("ascii")
             for image in images
         ]
+        reference_fingerprints = list(images)
+        if urls:
+            from PIL import Image
+
+            for url in urls:
+                try:
+                    media = api._media(url, max_bytes=MAX_IMAGE_BYTES)
+                    with Image.open(io.BytesIO(media.body)) as image:
+                        if image.width * image.height > 64_000_000:
+                            raise ValueError("Reference exceeds the pixel limit.")
+                        image.verify()
+                    reference_fingerprints.append(hashlib.sha256(media.body).digest())
+                except (ApixlyError, OSError, ValueError):
+                    raise ValueError(
+                        "Reference URL could not be read as an image. Refresh the source URL and retry; no generation was submitted. Existing task IDs can still be recovered with Video: Result."
+                    ) from None
+            references = urls
         fingerprint = _fingerprint(
-            api, "video", model, prompt, parameters, request_nonce, images
+            api,
+            "video",
+            model,
+            prompt,
+            parameters,
+            request_nonce,
+            reference_fingerprints,
         )
         job = SubmissionJournal(_state_path()).submit_once(
             fingerprint,

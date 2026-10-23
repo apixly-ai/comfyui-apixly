@@ -61,7 +61,7 @@ Python 3.10 or later is required. No local GPU is required for API generation.
 | Apixly Image: Submit | Starts one asynchronous text-to-image job | `task_id`, `submission_json` |
 | Apixly Image: Edit | Requires reference images and explicitly suggests the qualified Gemini editing model | `task_id`, `submission_json` |
 | Apixly Image: Result | Waits for an existing image task and decodes every result | `IMAGE`, result URL JSON, receipt JSON |
-| Apixly Video: Submit | Starts a video task, optionally with reference images | `task_id`, `submission_json` |
+| Apixly Video: Submit | Starts a video task, with public reference URLs when the model supports them | `task_id`, `submission_json` |
 | Apixly Task: Status | Performs one status GET for an existing task | status, result URL, receipt JSON |
 | Apixly Video: Result | Waits for an existing video task and optionally downloads it | local video path, result URL, receipt JSON |
 
@@ -104,13 +104,26 @@ example, only when the selected model supports them:
 {"seconds":5,"resolution":"720p","aspect_ratio":"16:9"}
 ```
 
-Reference IMAGE batches become inline PNG data URLs in `images`. A free live
+Use `reference_image_urls` for public HTTPS reference images. It accepts Image:
+Result's `result_urls_json` output, a JSON array of URLs, or one URL per line.
+The `reference-image-to-video` template visibly connects Load Image → Gemini Edit
+→ Image Result URLs → Grok image-to-video → Video Result. It contains two paid
+actions, and does not silently upload a local file to a third-party host.
+
+A free live
 capability check rejects references for known text-only models before submission.
 Choose an explicit image-to-video model, such as `grok-imagine-video-1.5-preview`,
 for references; the plugin never drops references or switches models. Unknown
-models remain subject to the gateway's validation. Additional
-reference video/audio URLs can be provided through the `videos`/`audios` arrays
-in `parameters_json`. They are sent to the gateway as supplied. Do not put
+models remain subject to the gateway's validation. That Grok route currently
+requires public URLs: local IMAGE/data-URL input is rejected before submission
+with instructions for the visible image-result URL workflow. Other routes may
+support local IMAGE tensors as inline PNGs, but this release does not claim
+compatibility with every route. Choose one reference source, not both.
+
+Reference URLs are read once through bounded HTTPS GETs without an API key to
+verify the image and hash its content. The original URLs are sent unchanged to
+Apixly. Refreshing a signed URL for the same bytes therefore reuses the same
+nonce/action; a source-download failure never starts a paid video. Do not put
 private account credentials in these URLs. Reference limits, task modes, output
 duration, resolution, and billing are model dependent; inspect current video
 capabilities before choosing them. This initial version supports `/v1/videos`
@@ -141,6 +154,8 @@ diagnosing a submission. Changing the request contents also starts a new action.
 
 A private local SQLite journal binds a key/account digest, request digest, and
 nonce to the accepted task ID. Re-executing the same action returns that ID.
+Public reference-image identity uses its content hash rather than the temporary
+URL signature, so URL refreshes do not create another paid generation.
 Only digests, task IDs/statuses, timestamps, and submission states are stored;
 keys, prompts, reference bytes, and raw API responses are not stored there.
 Its default location is `ComfyUI/user/apixly/submissions.sqlite3` (the actual

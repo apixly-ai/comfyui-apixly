@@ -318,6 +318,158 @@ def test_video_reference_preflight_never_replaces_an_explicit_model(
         assert json.loads(calls[1][2]["body"])["model"] == model
 
 
+def test_url_only_video_route_rejects_local_image_before_any_network():
+    node = NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]()
+    with pytest.raises(ValueError, match="reference_image_urls"):
+        node.submit(
+            "grok-imagine-video-1.5-preview",
+            "prompt",
+            "{}",
+            1,
+            reference_images=object(),
+        )
+
+
+def test_public_reference_urls_are_forwarded_as_urls_without_local_upload(
+    tmp_path, monkeypatch
+):
+    import io
+    import types
+
+    from PIL import Image
+
+    from apixly_media.client import Response
+
+    calls = []
+    image = io.BytesIO()
+    Image.new("RGB", (8, 8), "blue").save(image, format="PNG")
+
+    def request(method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        if method == "GET" and "/video/config" not in url:
+            return Response(200, {"content-type": "image/png"}, image.getvalue())
+        data = (
+            {
+                "data": [
+                    {
+                        "model": "grok-imagine-video-1.5-preview",
+                        "modes": ["image2video"],
+                    }
+                ]
+            }
+            if method == "GET"
+            else {"id": "209", "status": "queued"}
+        )
+        return Response(200, {}, json.dumps(data).encode())
+
+    api = ApixlyClient("secret", transport=types.SimpleNamespace(request=request))
+    monkeypatch.setattr(ApixlyClient, "from_environment", classmethod(lambda cls: api))
+    monkeypatch.setenv("APIXLY_STATE_DIR", str(tmp_path))
+    references = ["https://apixly.ai/v1/images/content?ref=signed-reference"]
+    result = NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+        "grok-imagine-video-1.5-preview",
+        "prompt",
+        "{}",
+        1,
+        reference_image_urls=json.dumps(references),
+        seconds=3,
+        resolution="720p",
+        aspect_ratio="16:9",
+    )
+    assert result["result"][0] == "209"
+    assert [call[0] for call in calls] == ["GET", "GET", "POST"]
+    assert "Authorization" not in calls[1][2]["headers"]
+    body = json.loads(calls[2][2]["body"])
+    assert body["model"] == "grok-imagine-video-1.5-preview"
+    assert body["images"] == references
+    assert not any("upload" in call[1] or "assets" in call[1] for call in calls)
+
+    refreshed = ["https://apixly.ai/v1/images/content?ref=fresh-signed-reference"]
+    repeated = NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+        "grok-imagine-video-1.5-preview",
+        "prompt",
+        "{}",
+        1,
+        reference_image_urls=json.dumps(refreshed),
+        seconds=3,
+        resolution="720p",
+        aspect_ratio="16:9",
+    )
+    assert repeated["result"][0] == "209"
+    assert len([call for call in calls if call[0] == "POST"]) == 1
+
+
+@pytest.mark.parametrize(
+    "value", ['["data:image/png;base64,eA=="]', "http://example.com/image.png"]
+)
+def test_video_reference_url_field_requires_public_https_urls(value):
+    with pytest.raises(ValueError, match="HTTPS"):
+        NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+            "grok-imagine-video-1.5-preview",
+            "prompt",
+            "{}",
+            1,
+            reference_image_urls=value,
+        )
+
+
+@pytest.mark.parametrize(
+    "value", ["[{}]", '[""]', '["https://media.example/image.png",42]']
+)
+def test_invalid_reference_members_are_never_silently_discarded(value):
+    with pytest.raises(ValueError, match="HTTPS"):
+        NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+            "grok-imagine-video", "prompt", "{}", 1, reference_image_urls=value
+        )
+
+
+def test_reference_video_template_uses_an_explicit_url_link():
+    path = (
+        Path(__file__).parents[1]
+        / "example_workflows"
+        / "reference-image-to-video.json"
+    )
+    graph = json.loads(path.read_text())
+    submit = next(
+        node for node in graph["nodes"] if node["type"] == "ApixlyVideoSubmit"
+    )
+    assert submit["widgets_values"][0] == "grok-imagine-video-1.5-preview"
+    assert (
+        next(
+            item for item in submit["inputs"] if item["name"] == "reference_image_urls"
+        )["link"]
+        is not None
+    )
+
+
+def test_unreadable_reference_does_not_submit_a_video_or_claim_the_nonce(
+    tmp_path, monkeypatch
+):
+    api = ApixlyClient("secret")
+    api._json = lambda *args, **kwargs: {
+        "data": [{"model": "grok-imagine-video-1.5-preview", "modes": ["image2video"]}]
+    }
+
+    def fail(*args, **kwargs):
+        from apixly_media.client import ApixlyError
+
+        raise ApixlyError("Reference expired")
+
+    api._media = fail
+    api.submit_video = lambda *args, **kwargs: pytest.fail("Paid POST must not run")
+    monkeypatch.setattr(ApixlyClient, "from_environment", classmethod(lambda cls: api))
+    monkeypatch.setenv("APIXLY_STATE_DIR", str(tmp_path))
+    with pytest.raises(ValueError, match="no generation was submitted"):
+        NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]().submit(
+            "grok-imagine-video-1.5-preview",
+            "prompt",
+            "{}",
+            1,
+            reference_image_urls="https://media.example/expired.png",
+        )
+    assert not list(tmp_path.glob("*.sqlite3"))
+
+
 def test_examples_are_importable_graphs_with_exact_registered_node_types():
     examples = Path(__file__).parents[1] / "example_workflows"
     paths = list(examples.glob("*.json"))
