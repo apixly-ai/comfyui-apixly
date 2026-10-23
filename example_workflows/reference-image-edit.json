@@ -188,7 +188,7 @@
         "Node name for S&R": "Note"
       },
       "widgets_values": [
-        "Select your reference image and an exact model supporting edits. Optional: connect a correctly sized MASK for masked editing; mask 1 repaints, 0 preserves. A model may reject unsupported masks. The reference is never silently removed. Keep the task ID for read-only recovery."
+        "Select your reference image. Gemini is the qualified reference-editing preset; choose another exact model only after checking its edit support. Masked editing is not available in this version. Keep the task ID for read-only recovery."
       ]
     }
   ],

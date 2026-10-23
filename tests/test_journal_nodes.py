@@ -98,6 +98,19 @@ def test_all_nodes_have_no_secret_inputs_or_credential_outputs():
         )
 
 
+def test_edit_template_describes_only_public_reference_editing():
+    path = Path(__file__).parents[1] / "example_workflows/reference-image-edit.json"
+    workflow = json.loads(path.read_text())
+    notes = " ".join(
+        str(value)
+        for node in workflow["nodes"]
+        if node["type"] == "Note"
+        for value in node.get("widgets_values", [])
+    )
+    assert "connect a correctly sized MASK" not in notes
+    assert "Masked editing is not available in this version" in notes
+
+
 def test_image_tensor_encoding_uses_every_reference_without_metadata():
     from io import BytesIO
 
