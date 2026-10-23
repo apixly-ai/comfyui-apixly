@@ -7,6 +7,7 @@ export function catalogEntries(snapshot, kind) {
 }
 export function setExactModel(node, id) {
   if (typeof id !== "string" || !id || id.length > 500 || /[\u0000-\u001f]/.test(id)) throw Error("Choose an exact model ID.");
+  if (node.inputs?.some(input => input.name === "model" && input.link != null)) throw Error("The model is connected to another node. Disconnect that input before choosing a model here.");
   const widget = node.widgets?.find(item => item.name === "model");
   if (!widget) throw Error("This node has no model field.");
   widget.value = id;

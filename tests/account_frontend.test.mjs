@@ -13,6 +13,9 @@ test("catalog uses complete server-typed options and never silently substitutes 
   setExactModel(node, "seedream-5-0");
   assert.equal(node.widgets[0].value, "seedream-5-0");
   assert.throws(() => setExactModel(node, ""));
+  node.inputs = [{ name: "model", link: 12 }];
+  assert.throws(() => setExactModel(node, "other-model"), /connected/);
+  assert.equal(node.widgets[0].value, "seedream-5-0");
 });
 
 test("account bridge reads only local metadata and protects actions with server CSRF", async () => {

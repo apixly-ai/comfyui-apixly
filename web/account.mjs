@@ -119,7 +119,11 @@ export function attachModelPicker(node, app, bridge) {
     } catch (failure) { if (!disposed && started === epoch) status.textContent = failure.message; }
   }
   picker.addEventListener("focus", () => load());
-  picker.addEventListener("change", () => { if (picker.value) { setExactModel(node, picker.value); app.graph?.setDirtyCanvas(true, true); } });
+  picker.addEventListener("change", () => {
+    if (!picker.value) return;
+    try { setExactModel(node, picker.value); app.graph?.setDirtyCanvas(true, true); }
+    catch (failure) { status.textContent = failure.message; picker.value = ""; }
+  });
   root.append(status, button("Refresh models", () => load(true)), el("small", "Connect or select an owned Key in the Apixly sidebar. You can still type any exact model ID in the native field.", "color:#64748b"));
   const widget = node.addDOMWidget("apixly_models", "div", root, { serialize: false, hideOnZoom: false });
   widget.computeSize = () => [300, 215];
