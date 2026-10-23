@@ -92,6 +92,7 @@
         "Node name for S&R": "ApixlyVideoResult"
       },
       "widgets_values": [
+        "",
         900,
         3.0,
         true
@@ -102,7 +103,7 @@
       "type": "Note",
       "pos": [
         20,
-        390
+        850
       ],
       "size": [
         820,

@@ -141,6 +141,7 @@
         "Node name for S&R": "ApixlyImageResult"
       },
       "widgets_values": [
+        "",
         600,
         3.0
       ]
@@ -177,7 +178,7 @@
       "type": "Note",
       "pos": [
         380,
-        390
+        850
       ],
       "size": [
         800,

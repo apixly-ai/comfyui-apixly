@@ -257,6 +257,16 @@ def test_examples_are_importable_graphs_with_exact_registered_node_types():
         assert "api_key" not in path.read_text().lower()
 
 
+def test_linked_task_widget_placeholders_keep_wait_parameters_in_their_slots():
+    examples = Path(__file__).parents[1] / "example_workflows"
+    for path in examples.glob("*.json"):
+        for node in json.loads(path.read_text())["nodes"]:
+            if node["type"] == "ApixlyImageResult":
+                assert node["widgets_values"] == ["", 600, 3.0]
+            if node["type"] == "ApixlyVideoResult":
+                assert node["widgets_values"] == ["", 900, 3.0, True]
+
+
 def test_comfy_importlib_entrypoint_loads_without_network_calls():
     import importlib.util
 
