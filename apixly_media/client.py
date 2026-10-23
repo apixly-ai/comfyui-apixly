@@ -3,6 +3,7 @@
 from __future__ import annotations
 
 import base64
+import hashlib
 import ipaddress
 import json
 import os
@@ -214,7 +215,7 @@ def public_receipt(job):
 
 
 class ApixlyClient:
-    def __init__(self, api_key, *, transport=None):
+    def __init__(self, api_key, *, transport=None, auth_mode="manual", identity=None):
         if (
             not isinstance(api_key, str)
             or not api_key.strip()
@@ -225,14 +226,42 @@ class ApixlyClient:
                 "Set APIXLY_API_KEY in the ComfyUI server environment and restart ComfyUI."
             )
         self._api_key = api_key.strip()
+        if auth_mode not in {"manual", "account"}:
+            raise ValueError("Choose a supported Apixly authentication mode.")
+        self.auth_mode = auth_mode
+        if auth_mode == "account":
+            if (
+                not re.fullmatch(r"apc_[A-Za-z0-9_-]{43}", self._api_key)
+                or not isinstance(identity, str)
+                or not re.fullmatch(r"[a-f0-9]{64}", identity)
+            ):
+                raise ValueError(
+                    "A scoped account connection and its identity are required."
+                )
+            self.base_url = "https://apixly.ai/api/integrations/v1"
+            self.fingerprint_identity = bytes.fromhex(identity)
+        else:
+            self.base_url = BASE_URL
+            self.fingerprint_identity = hashlib.sha256(self._api_key.encode()).digest()
         self.transport = transport or HTTPXTransport()
 
     @classmethod
     def from_environment(cls):
+        from .account import AccountManager
+
+        manager = AccountManager()
+        if manager.store.load().get("mode") == "account":
+            manager.refresh()
+            credentials = manager.credentials()
+            return cls(
+                credentials["token"],
+                auth_mode=credentials["mode"],
+                identity=credentials["identity"],
+            )
         return cls(os.environ.get("APIXLY_API_KEY", ""))
 
     def __repr__(self):
-        return "ApixlyClient(base_url='https://apixly.ai/v1', credentials=<redacted>)"
+        return f"ApixlyClient(base_url={self.base_url!r}, credentials=<redacted>)"
 
     def _clean(self, message):
         return str(message).replace(self._api_key, "[redacted]")[:1000]
@@ -253,7 +282,7 @@ class ApixlyClient:
         try:
             result = self.transport.request(
                 method,
-                BASE_URL + path,
+                self.base_url + path,
                 headers=headers,
                 body=body,
                 timeout=timeout,
@@ -448,7 +477,11 @@ class ApixlyClient:
                 if (
                     parsed.scheme != "https"
                     or parsed.netloc != "apixly.ai"
-                    or not re.fullmatch(r"/v1/videos/[1-9][0-9]*/content", parsed.path)
+                    or not re.fullmatch(
+                        re.escape(urllib.parse.urlsplit(self.base_url).path)
+                        + r"/videos/[1-9][0-9]*/content",
+                        parsed.path,
+                    )
                     or parsed.query
                 ):
                     raise ApixlyError(
@@ -514,7 +547,7 @@ class ApixlyClient:
                 "Video task is not completed; query the existing task ID first."
             )
         identifier = task_id(job.get("id"))
-        url = job.get("url") or BASE_URL + f"/videos/{identifier}/content"
+        url = job.get("url") or self.base_url + f"/videos/{identifier}/content"
         result = self._media(
             url, authenticated=not bool(job.get("url")), max_bytes=MAX_VIDEO_BYTES
         )

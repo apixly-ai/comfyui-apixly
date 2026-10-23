@@ -139,7 +139,7 @@ def _fingerprint(api, kind, model, prompt, params, nonce, images=(), mask=None):
     if not isinstance(nonce, int) or nonce < 0:
         raise ValueError("request_nonce must be a nonnegative integer.")
     digest = hashlib.sha256()
-    digest.update(hashlib.sha256(api._api_key.encode()).digest())
+    digest.update(api.fingerprint_identity)
     digest.update(
         json.dumps(
             [kind, model, prompt, params, nonce], sort_keys=True, allow_nan=False
