@@ -205,19 +205,17 @@ def _image_previews(tensors, identifier):
 
 
 class ApixlyImageSubmit:
+    ALLOW_REFERENCES = False
     CATEGORY = "Apixly/Media"
     FUNCTION = "submit"
     OUTPUT_NODE = True
     RETURN_TYPES = ("STRING", "STRING")
     RETURN_NAMES = ("task_id", "submission_json")
-    DESCRIPTION = "Submit one paid image job. Reference IMAGE switches to image editing. Credentials come only from the server environment."
+    DESCRIPTION = "Submit one paid text-to-image job. Use Apixly Image: Edit for references. Credentials come only from the server environment."
 
     @classmethod
     def INPUT_TYPES(cls):
-        return {
-            "required": _submit_inputs(),
-            "optional": {"reference_images": ("IMAGE",)},
-        }
+        return {"required": _submit_inputs()}
 
     def submit(
         self,
@@ -230,7 +228,15 @@ class ApixlyImageSubmit:
     ):
         if mask is not None:
             raise ValueError(
-                "Masked editing is not available in this release because no model passed the full visual qualification."
+                "Masked editing is not available in this version. Use reference-image editing instead."
+            )
+        if reference_images is not None and not self.ALLOW_REFERENCES:
+            raise ValueError(
+                "Use Apixly Image: Edit for reference images; this node only generates images from text."
+            )
+        if self.ALLOW_REFERENCES and reference_images is None:
+            raise ValueError(
+                "Apixly Image: Edit requires at least one reference image."
             )
         parameters = parse_parameters(parameters_json)
         api = ApixlyClient.from_environment()
@@ -249,6 +255,7 @@ class ApixlyImageSubmit:
 
 
 class ApixlyImageEdit(ApixlyImageSubmit):
+    ALLOW_REFERENCES = True
     DESCRIPTION = "Edit required reference images with an exact model. Gemini 3.1 Flash Image passed the initial reference-preservation smoke test."
 
     @classmethod
@@ -355,6 +362,17 @@ class ApixlyVideoSubmit:
                 parameters[name] = value
         api = ApixlyClient.from_environment()
         images = encode_images(reference_images)
+        if images:
+            capabilities = api._json("GET", "/video/config")
+            for capability in capabilities.get("data", []):
+                if not isinstance(capability, dict) or capability.get("model") != model:
+                    continue
+                modes = capability.get("modes", [])
+                if modes and not {"image2video", "frames2video"}.intersection(modes):
+                    raise ValueError(
+                        f"{model} currently supports text2video only. Keep your references and explicitly select an image2video model such as grok-imagine-video-1.5-preview; no model was changed and no generation was submitted."
+                    )
+                break
         references = [
             "data:image/png;base64," + base64.b64encode(image).decode("ascii")
             for image in images

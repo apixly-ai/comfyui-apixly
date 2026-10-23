@@ -58,7 +58,7 @@ Python 3.10 or later is required. No local GPU is required for API generation.
 
 | Node | Behavior | Outputs |
 | --- | --- | --- |
-| Apixly Image: Submit | Starts one asynchronous image job; connecting `reference_images` uses image editing | `task_id`, `submission_json` |
+| Apixly Image: Submit | Starts one asynchronous text-to-image job | `task_id`, `submission_json` |
 | Apixly Image: Edit | Requires reference images and explicitly suggests the qualified Gemini editing model | `task_id`, `submission_json` |
 | Apixly Image: Result | Waits for an existing image task and decodes every result | `IMAGE`, result URL JSON, receipt JSON |
 | Apixly Video: Submit | Starts a video task, optionally with reference images | `task_id`, `submission_json` |
@@ -85,7 +85,7 @@ Connect Image Submit → Image Result → Preview Image or Save Image. Typical
 {"size":"1024x1024","quality":"high","n":1}
 ```
 
-Connect Load Image to `reference_images` to edit an existing image. An IMAGE batch
+Use **Apixly Image: Edit** and connect Load Image to `reference_images` to edit an existing image. An IMAGE batch
 is sent as separate PNG reference files. The selected model must support the
 operation and fields. References are never silently discarded or duplicated.
 Mixed-size result batches are reported instead of being resized without permission.
@@ -104,7 +104,11 @@ example, only when the selected model supports them:
 {"seconds":5,"resolution":"720p","aspect_ratio":"16:9"}
 ```
 
-Reference IMAGE batches become inline PNG data URLs in `images`. Additional
+Reference IMAGE batches become inline PNG data URLs in `images`. A free live
+capability check rejects references for known text-only models before submission.
+Choose an explicit image-to-video model, such as `grok-imagine-video-1.5-preview`,
+for references; the plugin never drops references or switches models. Unknown
+models remain subject to the gateway's validation. Additional
 reference video/audio URLs can be provided through the `videos`/`audios` arrays
 in `parameters_json`. They are sent to the gateway as supplied. Do not put
 private account credentials in these URLs. Reference limits, task modes, output

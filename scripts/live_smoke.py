@@ -18,6 +18,7 @@ sys.path.insert(0, str(Path(__file__).resolve().parents[1]))
 
 from apixly_media.client import ApixlyClient, HTTPXTransport
 from apixly_media.nodes import (
+    ApixlyImageEdit,
     ApixlyImageResult,
     ApixlyImageSubmit,
     ApixlyVideoResult,
@@ -168,7 +169,7 @@ def main():
         )
 
         edit_prompt = "Change only the pale blue background to warm beige; keep the same single blue glass vase and its shape. No text or logos."
-        edit_id, _ = ApixlyImageSubmit().submit(
+        edit_id, _ = ApixlyImageEdit().submit(
             args.edit_model, edit_prompt, '{"n":1}', 1, reference_images=tensor
         )["result"]
         step = {

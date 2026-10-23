@@ -142,7 +142,7 @@ def test_image_submit_node_round_trip_and_no_resubmit_on_repeat(tmp_path, monkey
     )
     monkeypatch.setattr(ApixlyClient, "from_environment", classmethod(lambda cls: api))
     monkeypatch.setenv("APIXLY_STATE_DIR", str(tmp_path))
-    node = NODE_CLASS_MAPPINGS["ApixlyImageSubmit"]()
+    node = NODE_CLASS_MAPPINGS["ApixlyImageEdit"]()
     images = torch.from_numpy(np.zeros((1, 8, 8, 3), dtype=np.float32))
     a = node.submit(
         "gpt-image-exact", "prompt", '{"quality":"high"}', 1, reference_images=images
@@ -261,6 +261,61 @@ def test_unsupported_mask_node_call_is_rejected_before_any_paid_action():
     node = NODE_CLASS_MAPPINGS["ApixlyImageEdit"]()
     with pytest.raises(ValueError, match="not available"):
         node.submit("gpt-image-2", "prompt", "{}", 1, mask=object())
+
+
+def test_image_generation_node_rejects_references_before_any_paid_action():
+    node = NODE_CLASS_MAPPINGS["ApixlyImageSubmit"]()
+    specification = node.INPUT_TYPES()
+    assert "reference_images" not in specification.get("optional", {})
+    with pytest.raises(ValueError, match="Image: Edit"):
+        node.submit("grok-imagine-image", "prompt", "{}", 1, reference_images=object())
+
+
+def test_image_edit_node_requires_a_reference_before_any_paid_action():
+    with pytest.raises(ValueError, match="reference"):
+        NODE_CLASS_MAPPINGS["ApixlyImageEdit"]().submit(
+            "gemini-3.1-flash-image", "prompt", "{}", 1
+        )
+
+
+@pytest.mark.parametrize("known", [True, False])
+def test_video_reference_preflight_never_replaces_an_explicit_model(
+    tmp_path, monkeypatch, known
+):
+    import types
+
+    import numpy as np
+    import torch
+
+    from apixly_media.client import Response
+
+    model = "grok-imagine-video" if known else "new-model-not-in-capabilities"
+    calls = []
+
+    def request(method, url, **kwargs):
+        calls.append((method, url, kwargs))
+        data = (
+            {"data": [{"model": "grok-imagine-video", "modes": ["text2video"]}]}
+            if method == "GET"
+            else {"id": "208", "status": "queued"}
+        )
+        return Response(200, {}, json.dumps(data).encode())
+
+    api = ApixlyClient("secret", transport=types.SimpleNamespace(request=request))
+    monkeypatch.setattr(ApixlyClient, "from_environment", classmethod(lambda cls: api))
+    monkeypatch.setenv("APIXLY_STATE_DIR", str(tmp_path))
+    images = torch.from_numpy(np.zeros((1, 8, 8, 3), dtype=np.float32))
+    node = NODE_CLASS_MAPPINGS["ApixlyVideoSubmit"]()
+    if known:
+        with pytest.raises(ValueError, match="grok-imagine-video-1.5-preview"):
+            node.submit(model, "prompt", "{}", 1, reference_images=images)
+        assert [call[0] for call in calls] == ["GET"]
+        assert not list(tmp_path.glob("*.sqlite3"))
+    else:
+        result = node.submit(model, "prompt", "{}", 1, reference_images=images)
+        assert result["result"][0] == "208"
+        assert [call[0] for call in calls] == ["GET", "POST"]
+        assert json.loads(calls[1][2]["body"])["model"] == model
 
 
 def test_examples_are_importable_graphs_with_exact_registered_node_types():
