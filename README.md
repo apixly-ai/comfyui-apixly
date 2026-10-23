@@ -10,6 +10,9 @@ an API key with access to the chosen model, and sufficient API balance.** Apixly
 API charges are separate from Comfy credits and any Comfy subscription. This
 custom-node package is maintained by Apixly and is not a Comfy Partner Node.
 
+Selected 1K image generation costs **US$0.02 per image** as checked on October 23, 2026.
+See the [current model prices](https://platform.apixly.ai/models) for your chosen model and settings.
+
 Create a limited key in the [API key console](https://platform.apixly.ai/keys),
 check [model availability and prices](https://platform.apixly.ai/models), and
 review actual charges in [usage details](https://platform.apixly.ai/usage/logs).
