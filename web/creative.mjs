@@ -15,6 +15,17 @@ const PRESETS = {
     ["overexposedFilm", "Film glow"], ["nolanGray", "Cool gray"]],
 };
 const BUTTON = "min-height:44px;min-width:44px;border:1px solid #2e8fff55;border-radius:9px;background:#1670f018;color:inherit;cursor:pointer;padding:7px 10px;font:inherit;white-space:normal";
+// Original Studixly PresetSwatchGrid colors and stop positions.
+const SWATCHES = {
+  overexposedFilm: "linear-gradient(135deg,#fef3c7 0%,#fffbeb 55%,#e2e8f0 100%)",
+  blueBacklight: "linear-gradient(135deg,#0b1224 0%,#1670f0 70%,#7dd3fc 100%)",
+  rembrandt: "linear-gradient(135deg,#b4530a 0%,#451a03 60%,#0c0a09 100%)",
+  cyberpunk: "linear-gradient(135deg,#d946ef 0%,#0b1224 55%,#22d3ee 100%)",
+  psychedelicSunset: "linear-gradient(135deg,#f97316 0%,#e11d48 55%,#a21caf 100%)",
+  mysteriousDark: "linear-gradient(135deg,#1e293b 0%,#0f172a 55%,#020617 100%)",
+  goldenHour: "linear-gradient(135deg,#fbbf24 0%,#f59e0b 55%,#b45309 100%)",
+  nolanGray: "linear-gradient(135deg,#94a3b8 0%,#475569 55%,#1e293b 100%)",
+};
 function el(tag, text, style) {
   const item = document.createElement(tag);
   if (text !== undefined) item.textContent = text;
@@ -153,6 +164,10 @@ export function attachCreativePanel(node, app) {
     const presets = el("div", undefined, "display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:5px");
     for (const [id, label] of PRESETS[kind]) {
       const item = button(label, () => change(node, app, "preset", id)); item.style.cssText += ";font-size:11px;padding:5px";
+      if (kind === "lighting") {
+        const swatch = el("span", undefined, `display:block;width:100%;height:30px;margin-top:5px;border-radius:5px;background:${SWATCHES[id]}`);
+        swatch.dataset.apixlySwatch = id; swatch.setAttribute("aria-hidden", "true"); item.append(swatch);
+      }
       presetButtons.push([id, item]); presets.append(item);
     }
     row.append(presets); root.append(row);

@@ -3,6 +3,7 @@ import { api } from "../../scripts/api.js";
 import { nativeDownloadURL, safeResultURL } from "./helpers.mjs";
 import { isCreativeNode } from "./creative-helpers.mjs";
 import { attachCreativePanel } from "./creative.mjs";
+import { accountBridge, attachModelPicker, mountAccount } from "./account.mjs";
 
 const LINKS = [
   ["Apixly website", "https://apixly.ai"],
@@ -18,7 +19,7 @@ function accountSettings() {
   const panel = document.createElement("div");
   panel.style.cssText = "display:flex;flex-direction:column;gap:12px;padding:12px;max-width:560px;color:var(--fg-color,#e2e8f0)";
   const text = document.createElement("p");
-  text.textContent = "Apixly Media uses your server's APIXLY_API_KEY. Generation is paid separately from Comfy credits. Use a limited key; never paste it into a workflow.";
+  text.textContent = "Open the Apixly sidebar to connect your account, select an existing owned Key and browse the current model catalog. You can also use the server's APIXLY_API_KEY. Generation uses your Apixly balance.";
   panel.append(text);
   const links = document.createElement("div");
   links.style.cssText = "display:flex;gap:8px;flex-wrap:wrap";
@@ -38,6 +39,13 @@ function accountSettings() {
 app.registerExtension({
   name: "Apixly.Media",
   setup() {
+    let dispose;
+    app.extensionManager.registerSidebarTab({
+      id: "apixly-media-account", icon: "pi pi-sparkles", title: "Apixly",
+      tooltip: "Apixly account, API Keys & model catalog", type: "custom",
+      render(element) { dispose?.(); dispose = mountAccount(element, accountBridge(api)); },
+      destroy() { dispose?.(); dispose = undefined; },
+    });
     app.ui.settings.addSetting({
       id: "Apixly.Media.AccountAndHelp",
       name: "Account, keys & help",
@@ -54,6 +62,7 @@ app.registerExtension({
       attachCreativePanel(node, app);
       return;
     }
+    attachModelPicker(node, app, accountBridge(api));
     const panel = document.createElement("div");
     panel.dataset.apixlyResult = "true";
     panel.style.cssText = "box-sizing:border-box;display:flex;flex-direction:column;gap:9px;padding:12px;border:1px solid #2e8fff44;border-radius:10px;background:linear-gradient(145deg,#2e8fff10,#06070a99);color:#e2e8f0;font:12px/1.4 system-ui;overflow:auto;pointer-events:auto";

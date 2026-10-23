@@ -41,4 +41,4 @@ select = ["E4", "E7", "E9", "F", "I"]
 
 [tool.ruff.format]
 # Vendored canonical source must remain byte-identical across all three plugins.
-exclude = ["apixly_media/creative_compiler.py"]
+exclude = ["apixly_media/creative_compiler.py", "apixly_media/catalog.py"]

@@ -97,6 +97,15 @@ test("camera has an accessible native lens diagram", () => {
   assert.ok(all(node.panel).some(e => e.getAttribute("aria-label") === "Lens style diagram"));
 });
 
+test("lighting uses the original eight Studixly gradient swatches", () => {
+  const node = fakeNode("ApixlyPromptLighting", { enabled: false });
+  setup([node]);
+  const swatches = all(node.panel).filter(item => item.dataset.apixlySwatch);
+  assert.equal(swatches.length, 8);
+  const golden = swatches.find(item => item.dataset.apixlySwatch === "goldenHour");
+  assert.match(golden.style.cssText, /#fbbf24.*#f59e0b.*#b45309/);
+});
+
 test("Vue native widget setters can call callbacks without recursive writes or preset loss", () => {
   const node = fakeNode("ApixlyPromptViewpoint", { enabled: false, preset: "custom", yaw: 70, pitch: -20, shot: "none" });
   let writes = 0;
