@@ -1,6 +1,6 @@
 # Privacy and credentials
 
-This free plugin sends prompts, supplied reference images/masks, reference
+This free plugin sends prompts, supplied reference images, reference
 video/audio URLs, generation parameters, and an Apixly API key to
 `https://apixly.ai/v1`. Apixly forwards generation inputs to the provider needed
 to fulfill the selected model. Generation requires the external Apixly service

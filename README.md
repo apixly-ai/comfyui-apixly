@@ -86,20 +86,14 @@ Connect Image Submit → Image Result → Preview Image or Save Image. Typical
 ```
 
 Connect Load Image to `reference_images` to edit an existing image. An IMAGE batch
-is sent as separate PNG reference files. Connecting a MASK enables masked editing
-with **one** reference image. ComfyUI mask value 1 becomes a transparent PNG region
-to repaint; 0 becomes opaque to preserve. Mask dimensions must match the image.
-The selected model must support the operation and fields. Mask and references
-are never silently discarded or duplicated. Mixed-size result batches are
-reported instead of being resized without permission.
+is sent as separate PNG reference files. The selected model must support the
+operation and fields. References are never silently discarded or duplicated.
+Mixed-size result batches are reported instead of being resized without permission.
 
-**Mask forwarding is experimental, and strict region preservation is not
-qualified for this release.** A bounded `gpt-image-2.5-flare` test returned an
-image and preserved the main vase, but most added red-star pixels fell outside
-the transparent mask region. That successful HTTP/task result is not a successful
-strict-inpainting test. Use an independently qualified model/workflow before
-relying on untouched pixels. The plugin forwards the mask without silently
-removing it or claiming the provider obeyed it.
+**Masked inpainting is unavailable in this release.** The public nodes do not
+expose a MASK input and reject explicit masks before a paid request. Low-level
+REST transport tests remain for future qualification. Ordinary reference-image
+editing and multiple references are separate, supported workflows.
 
 ### Video generation
 

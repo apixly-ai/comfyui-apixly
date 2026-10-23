@@ -250,6 +250,19 @@ def test_task_identity_survives_comfy_cached_ui_asset_id_cleanup():
     assert ui["apixly"][0]["task_id"] == "207"
 
 
+def test_first_release_does_not_expose_unqualified_mask_inputs():
+    for name in ["ApixlyImageSubmit", "ApixlyImageEdit"]:
+        specification = NODE_CLASS_MAPPINGS[name].INPUT_TYPES()
+        assert "mask" not in specification.get("required", {})
+        assert "mask" not in specification.get("optional", {})
+
+
+def test_unsupported_mask_node_call_is_rejected_before_any_paid_action():
+    node = NODE_CLASS_MAPPINGS["ApixlyImageEdit"]()
+    with pytest.raises(ValueError, match="not available"):
+        node.submit("gpt-image-2", "prompt", "{}", 1, mask=object())
+
+
 def test_examples_are_importable_graphs_with_exact_registered_node_types():
     examples = Path(__file__).parents[1] / "example_workflows"
     paths = list(examples.glob("*.json"))

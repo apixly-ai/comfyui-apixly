@@ -60,11 +60,6 @@
           "name": "reference_images",
           "type": "IMAGE",
           "link": 1
-        },
-        {
-          "name": "mask",
-          "type": "MASK",
-          "link": null
         }
       ],
       "outputs": [

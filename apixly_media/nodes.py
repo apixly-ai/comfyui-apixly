@@ -216,15 +216,7 @@ class ApixlyImageSubmit:
     def INPUT_TYPES(cls):
         return {
             "required": _submit_inputs(),
-            "optional": {
-                "reference_images": ("IMAGE",),
-                "mask": (
-                    "MASK",
-                    {
-                        "tooltip": "Experimental mask forwarding. Strict region preservation is not qualified; providers may edit outside the mask."
-                    },
-                ),
-            },
+            "optional": {"reference_images": ("IMAGE",)},
         }
 
     def submit(
@@ -236,18 +228,14 @@ class ApixlyImageSubmit:
         reference_images=None,
         mask=None,
     ):
+        if mask is not None:
+            raise ValueError(
+                "Masked editing is not available in this release because no model passed the full visual qualification."
+            )
         parameters = parse_parameters(parameters_json)
         api = ApixlyClient.from_environment()
         images = encode_images(reference_images)
         mask_bytes = None
-        if mask is not None:
-            if not images:
-                raise ValueError("A mask requires a reference image.")
-            if len(images) != 1:
-                raise ValueError("Masked editing requires exactly one reference image.")
-            mask_bytes = encode_mask(
-                mask, reference_images.shape[2], reference_images.shape[1]
-            )
         fingerprint = _fingerprint(
             api, "image", model, prompt, parameters, request_nonce, images, mask_bytes
         )
@@ -267,17 +255,7 @@ class ApixlyImageEdit(ApixlyImageSubmit):
     def INPUT_TYPES(cls):
         required = _submit_inputs("gemini-3.1-flash-image")
         required["reference_images"] = ("IMAGE",)
-        return {
-            "required": required,
-            "optional": {
-                "mask": (
-                    "MASK",
-                    {
-                        "tooltip": "Experimental mask forwarding. Strict region preservation is not qualified; providers may edit outside the mask."
-                    },
-                )
-            },
-        }
+        return {"required": required}
 
 
 class ApixlyImageResult:
