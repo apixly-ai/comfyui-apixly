@@ -12,6 +12,13 @@ an exact model. Preview the result and pass images, URLs or video files to the n
 
 **15 nodes · 12 starter workflows · [中文说明](README.zh-CN.md)**
 
+> **Apixly — one reliable, low-cost AI API platform.**
+> Discover GPT, Gemini, Claude, image and video models in one place. Selected GPT text models are available from **10% of official API rates**. This integration brings Apixly's image and video APIs into ComfyUI.
+>
+> **Website:** [apixly.ai](https://apixly.ai) · **API console:** [platform.apixly.ai](https://platform.apixly.ai) · [Models & prices](https://platform.apixly.ai/models) · [Get an API key](https://platform.apixly.ai/keys) · [API docs](https://apixly.ai/docs)
+
+*The 10% example is `gpt-6.1-sol` standard input/output token pricing, checked October 25, 2026 against [OpenAI's published rates](https://developers.openai.com/api/docs/models/gpt-6.1-sol). Check current prices for your model, tier and Key.*
+
 <p>
   <a href="#install"><strong>Install the nodes →</strong></a> ·
   <a href="#2-connect-your-account"><strong>Connect your account →</strong></a> ·
@@ -32,8 +39,8 @@ an exact model. Preview the result and pass images, URLs or video files to the n
 The plugin is free. Generation requires your own Apixly account or server API key, access
 to the chosen model, and sufficient API balance. API charges are separate from
 Comfy credits and subscriptions. This package is maintained by Apixly and is not
-a Comfy Partner Node. Selected 1K image generation costs **US$0.02 per image** as
-checked on October 23, 2026; see [current model prices](https://platform.apixly.ai/models)
+a Comfy Partner Node. For an image price example, `gemini-3.1-flash-image` 1K costs
+**US$0.02 per image**, checked on October 25, 2026; see [current model prices](https://platform.apixly.ai/models)
 for your model and settings.
 
 ## Original tools, inside ComfyUI

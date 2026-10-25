@@ -9,6 +9,13 @@
 
 在 ComfyUI 中使用 [apixly.ai](https://apixly.ai) 生图、参考图编辑和生视频。连接自己的 Apixly 账号，选择默认 Studixly Key 或自己已有的 Key，懒加载该 Key 当前可用的图片/视频模型。账号、额度、API Key 与用量由 [platform.apixly.ai](https://platform.apixly.ai) 统一管理。
 
+> **Apixly：一站式、稳定低价的 AI API 平台。**
+> 汇聚 GPT、Gemini、Claude 及图片、视频模型；**指定 GPT 文本模型低至官方 1 折**。本插件将 Apixly 的图片、视频 API 接入 ComfyUI。
+>
+> **官网：** [apixly.ai](https://apixly.ai) · **API 控制台：** [platform.apixly.ai](https://platform.apixly.ai) · [模型与价格](https://platform.apixly.ai/models) · [获取 API Key](https://platform.apixly.ai/keys) · [API 文档](https://apixly.ai/docs)
+
+*1 折示例为 `gpt-6.1-sol` 标准输入、输出 token 档，2026-10-25 对照 [OpenAI 官方报价](https://developers.openai.com/api/docs/models/gpt-6.1-sol)核对；具体型号、档位与 Key 的价格以控制台为准。*
+
 插件免费；模型生成按你的 Apixly 账号余额计费。模型目录代表可发现的权限，不代表每个模型/参数都已完成质量验收。当前价格以[模型页面](https://platform.apixly.ai/models)为准。
 
 ## 实机界面与真实样例
