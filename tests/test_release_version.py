@@ -1,4 +1,5 @@
 import json
+import re
 from pathlib import Path
 
 from apixly_media.client import ApixlyClient, Response
@@ -20,8 +21,10 @@ def test_release_version_matches_api_and_media_user_agents():
     api._json("GET", "/video/config")
     api._media("https://media.example/image.png", max_bytes=100)
     metadata = (Path(__file__).parents[1] / "pyproject.toml").read_text()
-    assert 'version = "0.3.0"' in metadata
+    version_match = re.search(r'^version = "([^"]+)"$', metadata, re.MULTILINE)
+    assert version_match is not None
+    version = version_match.group(1)
     assert [headers["User-Agent"] for headers in calls] == [
-        "comfyui-apixly/0.3.0",
-        "comfyui-apixly/0.3.0",
+        f"comfyui-apixly/{version}",
+        f"comfyui-apixly/{version}",
     ]

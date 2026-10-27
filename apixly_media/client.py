@@ -18,7 +18,7 @@ from dataclasses import dataclass
 from pathlib import Path
 
 BASE_URL = "https://apixly.ai/v1"
-USER_AGENT = "comfyui-apixly/0.3.0"
+USER_AGENT = "comfyui-apixly/0.3.1"
 MAX_JSON_BYTES = 4 * 1024 * 1024
 MAX_IMAGE_BYTES = 32 * 1024 * 1024
 MAX_VIDEO_BYTES = 256 * 1024 * 1024

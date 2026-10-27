@@ -3,21 +3,20 @@
   <img src="assets/hero.svg" alt="Apixly Media for ComfyUI — Images, reference edits and videos. Fifteen nodes, twelve starter workflows, free creative and image tools." width="1440">
 </picture>
 
-# Apixly Media for ComfyUI
+# Apixly AI API for ComfyUI — images, reference edits and video
 
-Generate images, edit references and create videos through [apixly.ai](https://apixly.ai).
+Connect ComfyUI workflows to the [Apixly AI API](https://apixly.ai) for image
+generation, reference image editing and video generation.
 Connect your own Apixly account, choose an owned Key and discover its current models.
 Shape lighting, viewpoint and camera instructions for free, then explicitly submit
 an exact model. Preview the result and pass images, URLs or video files to the next step.
 
 **15 nodes · 12 starter workflows · [中文说明](README.zh-CN.md)**
 
-> **Apixly — one reliable, low-cost AI API platform.**
-> Discover GPT, Gemini, Claude, image and video models in one place. Selected GPT text models are available from **10% of official API rates**. This integration brings Apixly's image and video APIs into ComfyUI.
+> **Low-cost image and video APIs, inside your ComfyUI workflow.**
+> Connect your Apixly account, choose a model and save the result. Free lighting, viewpoint, expression and camera controls help prepare the prompt before you submit a paid request.
 >
 > **Website:** [apixly.ai](https://apixly.ai) · **API console:** [platform.apixly.ai](https://platform.apixly.ai) · [Models & prices](https://platform.apixly.ai/models) · [Get an API key](https://platform.apixly.ai/keys) · [API docs](https://apixly.ai/docs)
-
-*The 10% example is `gpt-6.1-sol` standard input/output token pricing, checked October 25, 2026 against [OpenAI's published rates](https://developers.openai.com/api/docs/models/gpt-6.1-sol). Check current prices for your model, tier and Key.*
 
 <p>
   <a href="#install"><strong>Install the nodes →</strong></a> ·
@@ -39,9 +38,30 @@ an exact model. Preview the result and pass images, URLs or video files to the n
 The plugin is free. Generation requires your own Apixly account or server API key, access
 to the chosen model, and sufficient API balance. API charges are separate from
 Comfy credits and subscriptions. This package is maintained by Apixly and is not
-a Comfy Partner Node. For an image price example, `gemini-3.1-flash-image` 1K costs
-**US$0.02 per image**, checked on October 25, 2026; see [current model prices](https://platform.apixly.ai/models)
-for your model and settings.
+a Comfy Partner Node.
+
+## About Apixly AI API
+
+[Apixly](https://apixly.ai) is an AI API platform for developers building with
+text, image and video models. Its platform APIs include GPT, Gemini and Claude
+text models; this package connects ComfyUI to image and video workflows. Your
+account, API Keys, model access and usage are managed in the
+[Apixly API console](https://platform.apixly.ai).
+
+Two scoped price examples, checked October 25, 2026:
+
+- `gemini-3.1-flash-image` at 1K: **US$0.02 per image**.
+- Selected GPT text pricing: `gpt-6.1-sol` standard input/output token rates at
+  **10% of [OpenAI's published rates](https://developers.openai.com/api/docs/models/gpt-6.1-sol)**.
+
+Prices vary by exact model, tier and Key. The GPT example is a text API offer;
+it does not apply to every GPT, Gemini, Claude, image or video model. Check the
+[current model catalog and prices](https://platform.apixly.ai/models) before
+submitting a job.
+
+Start with [an Apixly API Key](https://platform.apixly.ai/keys), the
+[API documentation](https://apixly.ai/docs), or the [ComfyUI setup guide](#install)
+below. This repository is maintained by Apixly; the plugin source is MIT licensed.
 
 ## Original tools, inside ComfyUI
 
@@ -133,6 +153,55 @@ The three **Creative → media** templates start with their media group muted
 (**Mode: Never**) and a fixed nonce. Running their free section only compiles a
 prompt. Review the final prompt, exact model and price, choose your reference if
 needed, then explicitly unmute the media group and queue a paid action.
+
+## Frequently asked questions
+
+### What can I create with the Apixly ComfyUI nodes?
+
+Generate images from text, edit one or more reference images, and create text
+or reference videos with a model that supports that input. The twelve starter
+workflows also cover prompt composition, expressions, image-grid splitting,
+enhancement instructions and single-shot character plans. Free planning tools
+prepare instructions; generation requires an explicit paid Submit node.
+
+### Do I need a local GPU or Comfy credits?
+
+API generation runs through Apixly, so it does not need a local generation GPU.
+The plugin and its offline tools are free. Media requests use your Apixly
+balance, with model access and prices shown in your account. Comfy credits or a
+ChatGPT/Claude subscription do not provide an Apixly API Key.
+
+### Can I connect an existing account and choose my own Key?
+
+Yes. Open the Apixly sidebar, connect through the normal Apixly website, and
+select your own Studixly Key or another active Key you own. You can also explicitly
+choose a server-provided manual Key. See [account setup](#2-connect-your-account)
+and the [API Key console](https://platform.apixly.ai/keys).
+
+### How do I get current image and video models?
+
+The [live model picker](#live-model-pickers) reads the catalog allowed by your
+selected Key, caches it for ten minutes, and supports manual refresh. An exact
+model ID remains editable. Catalog visibility does not mean that every model,
+parameter combination or output quality has been qualified by this plugin.
+
+### Can I retrieve an existing job without paying for another generation?
+
+Use its task ID with Image Result, Video Result or Task Status. These recovery
+nodes read the existing task; they do not submit another generation. Save results
+promptly: temporary image media is retained for about ten minutes. Expired media
+cannot be restored by changing a URL. Read the [nonce and recovery guide](#paid-actions-new-runs-and-recovery)
+before retrying an uncertain submission.
+
+### Where are credentials stored, and what does Registry publication mean?
+
+Credentials belong to the ComfyUI server operator, outside workflow widgets.
+People who can execute nodes on that server may spend its selected Key; use
+isolated instances for different accounts. Read [PRIVACY.md](PRIVACY.md) before
+using a shared server. Registry security review and node extraction have separate
+statuses; a public listing, downloadable ZIP or GitHub release does not prove
+approval. See the [Registry review notes](docs/REGISTRY_REVIEW.md) and
+[official current status](https://api.comfy.org/nodes/comfyui-apixly/versions?include_status_reason=true).
 
 ## Install
 
@@ -481,6 +550,13 @@ node --test tests/*.test.mjs
 python -m compileall -q apixly_media
 python -m pip wheel --no-build-isolation --no-deps . --wheel-dir /absolute/path/to/artifacts
 ```
+
+Version 0.3.1 updates the documentation, package description, discovery metadata
+and release User-Agent identifier. Node behavior, templates, account/authentication
+flows and model parameters are unchanged from the qualified 0.3.0 release.
+The 672 Python and 244 JavaScript checks passed again for 0.3.1, with offline
+request-header tests and a built wheel checked against the package metadata.
+No new paid media request was made for this documentation release.
 
 Version 0.3.0 passed **672 Python and 244 JavaScript checks**, plus an official
 ComfyUI frontend 1.57.1 installation. Native template/JSON loading, desktop and

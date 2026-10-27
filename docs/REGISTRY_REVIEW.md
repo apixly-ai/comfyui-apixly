@@ -1,19 +1,44 @@
 # Registry review notes
 
-The official Registry readback on October 23, 2026 marks both 0.1.2 and 0.1.3
-`NodeVersionStatusFlagged`. Each report contains four `info` findings: two
-environment-access matches and a local SQLite connection matched by both the
-database and network rules. Publication and download availability do not
-establish Registry approval. These historical reports do not establish that the
-newer 0.2 account functionality has passed scanning or review.
+The official Registry readback on October 27, 2026 marks version 0.3.0
+`NodeVersionStatusFlagged`, with six `info` findings. Node extraction is separately
+`pending`. A public listing, installation URL or downloadable archive does not
+establish security approval. The public extraction service is a separate pipeline;
+these two states alone do not establish why extraction is pending.
+
+The existing [manual-review request](https://github.com/Comfy-Org/registry-backend/issues/301)
+records the immutable 0.3.0 source/artifact and explains all six findings. It is a
+public issue in the corresponding official Registry repository, not proof of
+acceptance into an internal security-review queue or a promised review deadline.
 
 The current report is available from the [official version API](https://api.comfy.org/nodes/comfyui-apixly/versions?include_status_reason=true).
 
-| Reported 0.1.x location | Intended behavior | Data boundary |
+| Reported 0.3.0 location | Intended behavior | Data boundary |
 | --- | --- | --- |
+| `ConnectionStore` in `apixly_media/account.py` | Read `APIXLY_CONNECTION_DIR` or a platform data-directory setting for private connection state; optionally read the configured manual API Key. | Reads server-operator configuration without modifying the environment. Private connection state is outside browser-readable userdata. |
 | `ApixlyClient.from_environment` in `apixly_media/client.py` | Read the server owner's `APIXLY_API_KEY` when a media node executes. | The key authenticates requests to the fixed `https://apixly.ai/v1` origin. It is absent from graph widgets, outputs and the journal. API calls do not follow redirects. |
 | `_state_path` in `apixly_media/nodes.py` | Read an optional `APIXLY_STATE_DIR` override for the submission journal. | This reads configuration; it does not modify environment variables. Without an override, state belongs to ComfyUI's user directory. |
+| `_state` in `apixly_media/server.py` | Check whether the optional manual API Key is configured. | The native account panel receives a `manual_key_available` boolean, not the Key. |
 | `SubmissionJournal._connect` in `apixly_media/journal.py` | Open the local SQLite file used to prevent duplicate paid submissions. | This is a local file connection. The same line matched the scanner's database and network rules. The journal stores digests, task IDs, statuses and timestamps. |
+
+The table has five locations: the local SQLite call accounts for two findings.
+Earlier 0.1.2/0.1.3 reports on October 23 contained four informational findings.
+Those historical reports are not a clearance of the account functionality added
+later.
+
+## 0.3.1 documentation and metadata release
+
+Version 0.3.1 improves the English/Chinese introduction, Apixly API links,
+usage/cost/privacy FAQ and package discovery metadata. The only runtime change is
+the release version in the shared User-Agent constant, from 0.3.0 to 0.3.1. Node
+logic, templates, authentication, endpoints, model parameters, environment reads
+and the SQLite submission guard are retained. This is an actual documentation
+release, not an attempt to evade scanning or imply that 0.3.0 was approved.
+
+The new version's scan and extraction status must be checked independently after
+publication using the official API above. The same existing review issue will
+receive the new artifact and exact release-diff facts; no separate review request
+is needed. The runtime and storage boundaries below remain applicable.
 
 The journal commits a claim before submission and preserves uncertain outcomes
 so that rerunning a workflow does not blindly create another paid request. It

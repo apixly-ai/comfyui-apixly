@@ -4,8 +4,9 @@ build-backend = "setuptools.build_meta"
 
 [project]
 name = "comfyui-apixly"
-version = "0.3.0"
-description = "Create images and videos with apixly.ai. Resume tasks in ComfyUI; get API keys, models and usage at platform.apixly.ai."
+version = "0.3.1"
+description = "Apixly AI API for ComfyUI: image generation, reference image edits, video generation, free creative controls and task recovery."
+keywords = ["apixly", "comfyui", "ai-api", "image-generation", "image-editing", "video-generation", "creative-tools"]
 readme = "README.md"
 requires-python = ">=3.10"
 license = "MIT"
@@ -17,7 +18,10 @@ dependencies = ["httpx>=0.27,<1"]
 Homepage = "https://apixly.ai"
 Console = "https://platform.apixly.ai"
 Repository = "https://github.com/apixly-ai/comfyui-apixly"
-Documentation = "https://github.com/apixly-ai/comfyui-apixly#readme"
+Documentation = "https://apixly.ai/docs"
+"ComfyUI Guide" = "https://github.com/apixly-ai/comfyui-apixly#readme"
+"Models and Pricing" = "https://platform.apixly.ai/models"
+"API Keys" = "https://platform.apixly.ai/keys"
 Issues = "https://github.com/apixly-ai/comfyui-apixly/issues"
 
 [project.optional-dependencies]
@@ -29,7 +33,7 @@ packages = ["apixly_media"]
 [tool.comfy]
 Banner = "https://raw.githubusercontent.com/apixly-ai/comfyui-apixly/apixly/assets/social-preview.png"
 PublisherId = "apixly"
-DisplayName = "Apixly Media"
+DisplayName = "Apixly AI API: Images & Video"
 Icon = "https://raw.githubusercontent.com/apixly-ai/comfyui-apixly/HEAD/assets/icon.png"
 
 [tool.pytest.ini_options]

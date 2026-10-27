@@ -3,20 +3,31 @@
   <img src="assets/hero.svg" alt="Apixly ComfyUI：15 个节点、12 个入门工作流，账号绑定、生图、参考编辑、生视频及免费创作工具。" width="1440">
 </picture>
 
-# Apixly Media for ComfyUI
+# Apixly AI API for ComfyUI：生图、参考图编辑与视频生成
 
 **15 个节点 · 12 个工作流 · 9 个免费工具节点 · [English](README.md)**
 
 在 ComfyUI 中使用 [apixly.ai](https://apixly.ai) 生图、参考图编辑和生视频。连接自己的 Apixly 账号，选择默认 Studixly Key 或自己已有的 Key，懒加载该 Key 当前可用的图片/视频模型。账号、额度、API Key 与用量由 [platform.apixly.ai](https://platform.apixly.ai) 统一管理。
 
-> **Apixly：一站式、稳定低价的 AI API 平台。**
-> 汇聚 GPT、Gemini、Claude 及图片、视频模型；**指定 GPT 文本模型低至官方 1 折**。本插件将 Apixly 的图片、视频 API 接入 ComfyUI。
+> **在 ComfyUI 工作流中使用低成本图片、视频 API。**
+> 连接 Apixly 账号，选择模型并保存结果。打光、角度、表情和镜头控件可免费整理提示词；准备好后再明确提交付费请求。
 >
 > **官网：** [apixly.ai](https://apixly.ai) · **API 控制台：** [platform.apixly.ai](https://platform.apixly.ai) · [模型与价格](https://platform.apixly.ai/models) · [获取 API Key](https://platform.apixly.ai/keys) · [API 文档](https://apixly.ai/docs)
 
-*1 折示例为 `gpt-6.1-sol` 标准输入、输出 token 档，2026-10-25 对照 [OpenAI 官方报价](https://developers.openai.com/api/docs/models/gpt-6.1-sol)核对；具体型号、档位与 Key 的价格以控制台为准。*
-
 插件免费；模型生成按你的 Apixly 账号余额计费。模型目录代表可发现的权限，不代表每个模型/参数都已完成质量验收。当前价格以[模型页面](https://platform.apixly.ai/models)为准。
+
+## 关于 Apixly AI API
+
+[Apixly](https://apixly.ai) 为开发者提供文本、图片和视频模型 API，平台包含 GPT、Gemini、Claude 文本模型。本插件将图片、参考图编辑与视频工作流接入 ComfyUI；账号、API Key、模型权限和用量在 [Apixly API 控制台](https://platform.apixly.ai)管理。
+
+2026-10-25 核对的两个限定价格示例：
+
+- `gemini-3.1-flash-image` 的 1K 档：**每张 US$0.02**。
+- 指定 GPT 文本模型 `gpt-6.1-sol` 的标准输入、输出 token 档：**[OpenAI 官方报价](https://developers.openai.com/api/docs/models/gpt-6.1-sol)的 1 折**。
+
+具体价格随型号、档位和 Key 而定。GPT 示例属于文本 API，不代表所有 GPT、Gemini、Claude、图片或视频模型均为 1 折；提交前请查看[当前模型与价格](https://platform.apixly.ai/models)。
+
+从[创建 API Key](https://platform.apixly.ai/keys)、[API 文档](https://apixly.ai/docs)或下方[ComfyUI 安装与连接指南](#安装和连接)开始。本仓库由 Apixly 维护，插件源码使用 MIT 许可证。
 
 ## 实机界面与真实样例
 
@@ -38,6 +49,32 @@
 </p>
 
 左图由 `grok-imagine-image` 生成；中图由表情 → Compose V2 → `gemini-3.1-flash-image` 编辑；右图使用增强指令 → 同一 Gemini 模型。两次编辑都引用左侧已保存原图。这里保留原 API 文件字节和提供方元数据，没有后期修图。请求画幅为 2:3，实际尺寸依次是 768×1152、848×1264、843×1264。原计划虽写全身，第一张实际没有拍到脚；AI 重绘也可能改变细节，不能据此承诺像素不变的超分或一定更好。
+
+## 常见问题
+
+### Apixly 的 ComfyUI 节点能做什么？
+
+可以文生图、用一张或多张参考图编辑，以及通过支持相应输入的模型生成文本视频或参考视频。12 个模板还覆盖提示词编排、表情、切图、增强指令和单镜头角色计划。免费计划工具只准备输入，模型生成需要明确执行付费 Submit 节点。
+
+### 需要本地显卡或 Comfy credits 吗？
+
+API 生图、生视频通过 Apixly 执行，不需要本地生成显卡。插件与离线工具免费，模型请求使用 Apixly 余额；价格和权限由所选模型与 Key 决定。Comfy credits、ChatGPT 或 Claude 订阅不能充当 Apixly API Key。
+
+### 可以绑定已有账号、使用自己的 Key 吗？
+
+可以。在 Apixly 侧栏连接账号，通过正常网站授权，选择自己的默认 Studixly Key 或其他有效 Key；也可以明确切换到服务端配置的手动 Key。具体步骤见[安装和连接](#安装和连接)，Key 在[控制台](https://platform.apixly.ai/keys)管理。
+
+### 图片、视频模型如何更新？
+
+模型选择器按当前 Key 的权限读取目录，缓存十分钟，可手动刷新；也支持明确输入精确模型 ID。刷新不会静默改掉已有模型。目录可发现不代表所有型号、参数组合或输出质量都已通过本插件验收。
+
+### 已有任务能恢复结果而不再生成吗？
+
+使用原任务 ID 接入 Image Result、Video Result 或 Task Status。这些节点只读取已有任务，不会提交新的生成。请及时保存结果，图片临时媒体约保留十分钟；媒体本身过期后，换 URL 不能恢复它。遇到不确定的提交结果，先查原任务，不要通过改 nonce 盲目重试。
+
+### 凭据放在哪里？Registry 发布是否代表审核通过？
+
+凭据属于 ComfyUI 服务端操作者，不写入节点或工作流。能在该服务执行节点的人可能使用所选 Key 的余额；不同账号请用隔离实例，完整边界见 [PRIVACY.md](PRIVACY.md)。Registry 安全审核和节点提取是分别记录的流程；公开页面、ZIP 可下载或 GitHub 发版都不能证明审核通过。见[审核说明](docs/REGISTRY_REVIEW.md)与[官方当前状态](https://api.comfy.org/nodes/comfyui-apixly/versions?include_status_reason=true)。
 
 ## 安装和连接
 
@@ -94,6 +131,10 @@
 
 ## 开发验证
 
+0.3.1 更新文档、包描述、发现性元数据与请求 User-Agent 中的发布版本标识；节点行为、模板、账号鉴权流程和模型参数沿用已验收的 0.3.0。
+
+0.3.1 再次通过 672 项 Python 与 244 项 JavaScript 检查，并用离线请求头测试及实际构建的 wheel 核对发布元数据。本次文档发布没有新增付费模型请求。
+
 安装测试依赖 `python -m pip install -e '.[test]'`，再执行 `python -m pytest -q` 与 `node --test tests/*.test.mjs`。测试 extra 包含 NumPy，运行环境使用宿主 ComfyUI 已有的 PyTorch/NumPy/Pillow。原网页 381e TypeScript 差分 fixture 保留来源哈希；字面插值修复使用单独回归 fixture，未伪造为旧网页输出。
 
-本版已通过 **672 项 Python、244 项 JavaScript 检查**，并在原版 ComfyUI frontend 1.57.1 完成 Templates/JSON 载入、桌面和 375px 面板边界与 44px 触点、真实滚轮到达复制/重置、保存自定义画布与节点尺寸的恢复。RGB/RGBA、奇数尺寸和多图切块均对照进入切图节点的像素逐项恢复；三笔独立放行的真实图片请求完成，原 API 文件及原生下载均已解码保存。实际模型边界见上方样例；headless 浏览器不代表已实测触摸或 iOS。支持：[support@apixly.ai](mailto:support@apixly.ai) · [API 文档](https://apixly.ai/docs) · [账号与用量](https://platform.apixly.ai)。
+0.3.0 已通过 **672 项 Python、244 项 JavaScript 检查**，并在原版 ComfyUI frontend 1.57.1 完成 Templates/JSON 载入、桌面和 375px 面板边界与 44px 触点、真实滚轮到达复制/重置、保存自定义画布与节点尺寸的恢复。RGB/RGBA、奇数尺寸和多图切块均对照进入切图节点的像素逐项恢复；三笔独立放行的真实图片请求完成，原 API 文件及原生下载均已解码保存。实际模型边界见上方样例；headless 浏览器不代表已实测触摸或 iOS。支持：[support@apixly.ai](mailto:support@apixly.ai) · [API 文档](https://apixly.ai/docs) · [账号与用量](https://platform.apixly.ai)。
