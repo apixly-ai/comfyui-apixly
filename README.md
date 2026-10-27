@@ -63,6 +63,8 @@ Start with [an Apixly API Key](https://platform.apixly.ai/keys), the
 [API documentation](https://apixly.ai/docs), or the [ComfyUI setup guide](#install)
 below. This repository is maintained by Apixly; the plugin source is MIT licensed.
 
+For installation sources and an overview of the ComfyUI, VS Code and Dify integrations, read the [official Apixly plugin guide](https://apixly.ai/guides/en/apixly-ai-api-plugins).
+
 ## Original tools, inside ComfyUI
 
 <p align="center">

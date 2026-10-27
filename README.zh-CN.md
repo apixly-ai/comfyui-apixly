@@ -29,6 +29,8 @@
 
 从[创建 API Key](https://platform.apixly.ai/keys)、[API 文档](https://apixly.ai/docs)或下方[ComfyUI 安装与连接指南](#安装和连接)开始。本仓库由 Apixly 维护，插件源码使用 MIT 许可证。
 
+各宿主的安装入口、用途与费用边界，见 [Apixly 官网插件导读](https://apixly.ai/guides/zh/apixly-ai-api-plugins)。
+
 ## 实机界面与真实样例
 
 <p align="center">
